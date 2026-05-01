@@ -7,32 +7,37 @@ export default function NewsletterForm() {
 
   if (submitted) {
     return (
-      <p className="text-[#10b981] font-semibold text-sm py-4">
-        Thanks for subscribing! We'll be in touch soon.
+      <p className="text-white font-semibold text-sm py-4">
+        ✓ You're in! Check your inbox soon.
       </p>
     );
   }
 
   return (
-    <form
-      className="flex flex-col sm:flex-row gap-3"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSubmitted(true);
-      }}
-    >
-      <input
-        type="email"
-        required
-        placeholder="Enter your email"
-        className="flex-1 px-4 py-3 rounded-full border border-indigo-200 bg-white text-[#1e293b] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#6366f1] text-sm"
-      />
-      <button
-        type="submit"
-        className="bg-[#6366f1] text-white font-semibold px-7 py-3 rounded-full hover:bg-[#4f46e5] transition-colors text-sm"
+    <div className="w-full">
+      <form
+        className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSubmitted(true);
+        }}
       >
-        Subscribe
-      </button>
-    </form>
+        <input
+          type="email"
+          required
+          placeholder="Enter your email address"
+          className="flex-1 px-5 py-3.5 rounded-full bg-white text-[#1e293b] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-white/50 text-sm shadow-sm"
+        />
+        <button
+          type="submit"
+          className="bg-white text-[#6366f1] font-bold px-7 py-3.5 rounded-full hover:bg-indigo-50 transition-colors text-sm shadow-sm whitespace-nowrap"
+        >
+          Subscribe →
+        </button>
+      </form>
+      <p className="text-indigo-200 text-xs mt-3">
+        Join 500+ readers. No spam, ever.
+      </p>
+    </div>
   );
 }

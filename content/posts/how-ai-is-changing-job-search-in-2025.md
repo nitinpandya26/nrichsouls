@@ -5,6 +5,7 @@ excerpt: "(Resumes, Cover Letters, and Interview Prep Using AI) Discover how AI 
 category: "ai-tech-automation"
 date: "June 24, 2025"
 readTime: "4 min read"
+coverImage: "/images/how-ai-is-changing-job-search-in-2025.png"
 ---
 
 <!-- wp:paragraph -->

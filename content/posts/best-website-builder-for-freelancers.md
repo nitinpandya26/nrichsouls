@@ -5,6 +5,7 @@ excerpt: "Looking for the best website builder for freelancers aiming to attract
 category: "career-growth-remote-work"
 date: "July 5, 2025"
 readTime: "6 min read"
+coverImage: "/images/best-website-builder-for-freelancers.png"
 ---
 
 <!-- wp:paragraph -->

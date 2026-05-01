@@ -5,6 +5,7 @@ excerpt: "(Ethical Automation Tips for Non-Tech Employees) Discover game-changin
 category: "ai-tech-automation"
 date: "June 21, 2025"
 readTime: "4 min read"
+coverImage: "/images/smart-workflow-hacks.png"
 ---
 
 <!-- wp:paragraph -->

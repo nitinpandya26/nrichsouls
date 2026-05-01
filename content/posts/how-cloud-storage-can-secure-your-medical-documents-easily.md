@@ -5,6 +5,7 @@ excerpt: "Discover how cloud storage for medical documents can revolutionize hea
 category: "health-wellness"
 date: "July 7, 2025"
 readTime: "5 min read"
+coverImage: "/images/how-cloud-storage-can-secure-your-medical-documents-easily.png"
 ---
 
 <!-- wp:paragraph -->

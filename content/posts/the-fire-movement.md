@@ -5,6 +5,7 @@ excerpt: "(Especially for Indian Millennial and Gen Z Balancing Freedom vs Hustl
 category: "career-growth-remote-work"
 date: "June 18, 2025"
 readTime: "6 min read"
+coverImage: "/images/the-fire-movement.png"
 ---
 
 <!-- wp:paragraph -->

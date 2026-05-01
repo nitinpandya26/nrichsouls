@@ -5,6 +5,7 @@ excerpt: "Discover top holistic health courses with science-backed methods to en
 category: "health-wellness"
 date: "July 4, 2025"
 readTime: "5 min read"
+coverImage: "/images/holistic-health-courses-with-science.png"
 ---
 
 <!-- wp:paragraph -->

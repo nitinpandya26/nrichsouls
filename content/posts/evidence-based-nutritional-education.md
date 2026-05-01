@@ -5,6 +5,7 @@ excerpt: "Unlock the power of science-backed nutrition. Learn how specific foods
 category: "health-wellness"
 date: "July 2, 2025"
 readTime: "4 min read"
+coverImage: "/images/evidence-based-nutritional-education.png"
 ---
 
 <!-- wp:paragraph -->

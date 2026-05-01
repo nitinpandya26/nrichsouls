@@ -5,6 +5,7 @@ excerpt: "Explore updated insights for 2025 on online MBAs tailored for remote m
 category: "career-growth-remote-work"
 date: "July 20, 2025"
 readTime: "5 min read"
+coverImage: "/images/online-mba-for-remote-manager-roles-unlock-your-leadership-potential-with-short-online-programs-2025-update.png"
 ---
 
 <!-- wp:paragraph -->

@@ -5,6 +5,7 @@ excerpt: "Discover how AI prediction for tech job relocation is revolutionizing 
 category: "ai-tech-automation"
 date: "July 12, 2025"
 readTime: "6 min read"
+coverImage: "/images/how-ai-predicts-the-best-metro-areas-for-tech-job-relocation-us-edition.png"
 ---
 
 <!-- wp:paragraph -->

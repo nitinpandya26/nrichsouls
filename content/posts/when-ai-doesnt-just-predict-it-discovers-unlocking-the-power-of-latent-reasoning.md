@@ -5,6 +5,7 @@ excerpt: "Discover how latent reasoning lets AI models move beyond pattern-match
 category: "ai-tech-automation"
 date: "July 23, 2025"
 readTime: "8 min read"
+coverImage: "/images/when-ai-doesnt-just-predict-it-discovers-unlocking-the-power-of-latent-reasoning.png"
 ---
 
 <!-- wp:paragraph -->

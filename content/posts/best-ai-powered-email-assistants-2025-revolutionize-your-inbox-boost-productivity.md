@@ -5,6 +5,7 @@ excerpt: "Discover the best AI-powered email assistants in 2025 that can transfo
 category: "ai-tech-automation"
 date: "July 9, 2025"
 readTime: "5 min read"
+coverImage: "/images/best-ai-powered-email-assistants-2025-revolutionize-your-inbox-boost-productivity.png"
 ---
 
 <!-- wp:paragraph -->

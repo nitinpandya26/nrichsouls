@@ -5,6 +5,7 @@ excerpt: "Discover the best digital marketing certifications for side hustles. L
 category: "career-growth-remote-work"
 date: "July 6, 2025"
 readTime: "5 min read"
+coverImage: "/images/digital-marketing-certifications.png"
 ---
 
 <!-- wp:paragraph -->

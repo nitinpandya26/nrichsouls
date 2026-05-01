@@ -5,6 +5,7 @@ excerpt: "Discover how Notion Mail is redefining the way professionals manage em
 category: "ai-tech-automation"
 date: "July 8, 2025"
 readTime: "8 min read"
+coverImage: "/images/notion-mail-the-future-of-email-is-here-with-ai-powered-assistance.png"
 ---
 
 <!-- wp:paragraph -->

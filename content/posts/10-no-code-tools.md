@@ -5,6 +5,7 @@ excerpt: "(Zapier, Make, Glide, Notion AI—All Simplified) Discover the top 10 
 category: "ai-tech-automation"
 date: "June 20, 2025"
 readTime: "5 min read"
+coverImage: "/images/10-no-code-tools.png"
 ---
 
 <!-- wp:paragraph -->

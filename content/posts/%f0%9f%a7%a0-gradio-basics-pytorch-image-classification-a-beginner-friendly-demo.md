@@ -1,10 +1,11 @@
----
+﻿---
 title: "🧠 Gradio Basics + PyTorch Image Classification: A Beginner-Friendly Demo"
-slug: "%f0%9f%a7%a0-gradio-basics-pytorch-image-classification-a-beginner-friendly-demo"
+slug: "gradio-basics-pytorch-image-classification-a-beginner-friendly-demo"
 excerpt: "New to AI? Learn what Gradio is and why it’s so useful. Discover how to create an interactive PyTorch image classification app in just a few lines of code. 📌 Introduction: Why Should You Care About Gradio? Ever trained"
 category: "ai-tech-automation"
 date: "July 11, 2025"
 readTime: "4 min read"
+coverImage: "/images/gradio-basics-pytorch-image-classification-a-beginner-friendly-demo.png"
 ---
 
 <!-- wp:paragraph -->

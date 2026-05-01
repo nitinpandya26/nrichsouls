@@ -1,10 +1,11 @@
----
+﻿---
 title: "🧠 BLIP &amp; BLIP-2 Demystified: Vision-Language Transformers That Understand Images Like Humans"
-slug: "%f0%9f%a7%a0-blip-blip-2-demystified-vision-language-transformers-that-understand-images-like-humans"
+slug: "blip-blip-2-demystified-vision-language-transformers-that-understand-images-like-humans"
 excerpt: "Discover BLIP and BLIP-2—state-of-the-art vision-language models that understand and describe images. Learn how to use them for captioning and visual question answering with complete code examples using Hugging Face Tran..."
 category: "ai-tech-automation"
 date: "July 10, 2025"
 readTime: "4 min read"
+coverImage: "/images/blip-blip-2-demystified-vision-language-transformers-that-understand-images-like-humans.png"
 ---
 
 <!-- wp:paragraph -->

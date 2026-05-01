@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import CategoryBadge from "../../components/CategoryBadge";
 import { getPostBySlug, getAllPosts } from "../../../lib/posts";
 
@@ -52,11 +53,25 @@ export default async function BlogPostPage({ params }) {
       </h1>
 
       {/* Meta */}
-      <div className="flex items-center gap-3 text-sm text-[#64748b] mb-10 pb-6 border-b border-slate-200">
+      <div className="flex items-center gap-3 text-sm text-[#64748b] mb-8 pb-6 border-b border-slate-200">
         <span>{post.date}</span>
         <span>·</span>
         <span>{post.readTime}</span>
       </div>
+
+      {/* Cover image */}
+      {post.coverImage && (
+        <div className="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden mb-10 shadow-sm">
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 768px"
+            priority
+          />
+        </div>
+      )}
 
       {/* Content */}
       <article

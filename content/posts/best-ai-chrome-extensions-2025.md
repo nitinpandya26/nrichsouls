@@ -5,6 +5,7 @@ excerpt: "Discover the top AI Chrome extensions for 2025 that can revolutionize 
 category: "ai-tech-automation"
 date: "June 23, 2025"
 readTime: "4 min read"
+coverImage: "/images/best-ai-chrome-extensions-2025.png"
 ---
 
 <!-- wp:paragraph -->

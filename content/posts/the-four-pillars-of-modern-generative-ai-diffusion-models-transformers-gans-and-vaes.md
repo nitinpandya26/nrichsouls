@@ -5,6 +5,7 @@ excerpt: "Introduction: Generative AI isn’t just a buzzword—it’s the invis
 category: "ai-tech-automation"
 date: "July 14, 2025"
 readTime: "8 min read"
+coverImage: "/images/the-four-pillars-of-modern-generative-ai-diffusion-models-transformers-gans-and-vaes.png"
 ---
 
 <!-- wp:heading -->

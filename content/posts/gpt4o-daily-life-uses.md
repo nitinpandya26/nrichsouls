@@ -5,6 +5,7 @@ excerpt: "Discover how to use GPT-4o in your daily life with 7 easy ideas that b
 category: "ai-tech-automation"
 date: "June 14, 2025"
 readTime: "5 min read"
+coverImage: "/images/gpt4o-daily-life-uses.png"
 ---
 
 <!-- wp:paragraph -->

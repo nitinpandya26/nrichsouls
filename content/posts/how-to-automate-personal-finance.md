@@ -5,6 +5,7 @@ excerpt: "(From Budgeting to Mutual Fund Tracking — Region-Specific Tools) Dis
 category: "ai-tech-automation"
 date: "June 25, 2025"
 readTime: "4 min read"
+coverImage: "/images/how-to-automate-personal-finance.png"
 ---
 
 <!-- wp:paragraph -->

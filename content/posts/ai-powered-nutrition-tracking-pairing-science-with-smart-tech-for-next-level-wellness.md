@@ -5,6 +5,7 @@ excerpt: "Discover how AI-powered nutrition tracking combines cutting-edge techn
 category: "ai-tech-automation"
 date: "July 3, 2025"
 readTime: "4 min read"
+coverImage: "/images/ai-powered-nutrition-tracking-pairing-science-with-smart-tech-for-next-level-wellness.png"
 ---
 
 <!-- wp:paragraph -->

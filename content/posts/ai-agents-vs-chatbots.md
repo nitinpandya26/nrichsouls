@@ -5,6 +5,7 @@ excerpt: "🌎 Demystifying Autonomous Agents Like Auto-GPT, Devin, and Cognosys
 category: "ai-tech-automation"
 date: "June 16, 2025"
 readTime: "3 min read"
+coverImage: "/images/ai-agents-vs-chatbots.png"
 ---
 
 <!-- wp:paragraph -->

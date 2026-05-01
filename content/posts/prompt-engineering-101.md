@@ -5,6 +5,7 @@ excerpt: "(Real Examples for Marketers, Students, and Analysts) Unlock the secre
 category: "ai-tech-automation"
 date: "June 28, 2025"
 readTime: "4 min read"
+coverImage: "/images/prompt-engineering-101.png"
 ---
 
 <!-- wp:paragraph -->

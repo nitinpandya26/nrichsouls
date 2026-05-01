@@ -5,6 +5,7 @@ excerpt: "Discover how to reset your circadian rhythm naturally with this 7-day 
 category: "health-wellness"
 date: "June 17, 2025"
 readTime: "3 min read"
+coverImage: "/images/sleep-syncing.png"
 ---
 
 <!-- wp:paragraph -->

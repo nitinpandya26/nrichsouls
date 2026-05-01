@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import CategoryBadge from "./CategoryBadge";
 
 const ACCENT_COLORS = {
@@ -13,8 +14,25 @@ export default function BlogCard({ post, accentColor }) {
   return (
     <div
       className="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
-      style={{ borderTop: `4px solid ${accent}` }}
+      style={post.coverImage ? {} : { borderTop: `4px solid ${accent}` }}
     >
+      {/* Cover image */}
+      {post.coverImage && (
+        <div className="relative w-full h-48 flex-shrink-0">
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+          <div
+            className="absolute bottom-0 left-0 right-0 h-1"
+            style={{ backgroundColor: accent }}
+          />
+        </div>
+      )}
+
       <div className="p-6 flex flex-col flex-1 gap-3">
         <CategoryBadge category={post.category} color={accent} />
 

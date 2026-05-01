@@ -5,6 +5,7 @@ excerpt: "Discover how Sora and Runway ML are transforming AI video creation. Le
 category: "ai-tech-automation"
 date: "June 19, 2025"
 readTime: "5 min read"
+coverImage: "/images/the-rise-of-sora-and-runway-ml.png"
 ---
 
 <!-- wp:paragraph -->

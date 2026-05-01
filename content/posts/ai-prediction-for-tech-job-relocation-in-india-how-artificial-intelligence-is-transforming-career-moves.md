@@ -5,6 +5,7 @@ excerpt: "Discover how AI prediction for tech job relocation is revolutionizing 
 category: "ai-tech-automation"
 date: "July 13, 2025"
 readTime: "6 min read"
+coverImage: "/images/ai-prediction-for-tech-job-relocation-in-india-how-artificial-intelligence-is-transforming-career-moves.png"
 ---
 
 <!-- wp:paragraph -->

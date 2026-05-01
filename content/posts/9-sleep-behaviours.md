@@ -5,6 +5,7 @@ excerpt: "Discover the 9 crucial sleep behaviors you should never ignore to impr
 category: "health-wellness"
 date: "June 29, 2025"
 readTime: "5 min read"
+coverImage: "/images/9-sleep-behaviours.png"
 ---
 
 <!-- wp:paragraph -->

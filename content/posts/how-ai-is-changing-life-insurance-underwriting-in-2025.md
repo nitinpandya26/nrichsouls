@@ -5,6 +5,7 @@ excerpt: "Discover how AI is revolutionizing life insurance underwriting in 2025
 category: "ai-tech-automation"
 date: "July 21, 2025"
 readTime: "5 min read"
+coverImage: "/images/how-ai-is-changing-life-insurance-underwriting-in-2025.png"
 ---
 
 <!-- wp:paragraph -->

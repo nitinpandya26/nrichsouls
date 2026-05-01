@@ -5,6 +5,7 @@ excerpt: "Struggling to decode health insurance fine print? Discover expert tips
 category: "health-wellness"
 date: "July 1, 2025"
 readTime: "5 min read"
+coverImage: "/images/decode-health-insurance.png"
 ---
 
 <!-- wp:paragraph -->

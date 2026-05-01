@@ -5,6 +5,7 @@ excerpt: "(Gig Economy Meets AI—Tools, Prompts, Pricing) Discover how GenAI is
 category: "ai-tech-automation"
 date: "June 22, 2025"
 readTime: "4 min read"
+coverImage: "/images/genai-is-transforming-freelancing.png"
 ---
 
 <!-- wp:paragraph -->

@@ -5,6 +5,7 @@ excerpt: "(No Coding Background Needed) Discover the smoothest way to transition
 category: "ai-tech-automation"
 date: "June 27, 2025"
 readTime: "4 min read"
+coverImage: "/images/from-excel-to-python.png"
 ---
 
 <!-- wp:paragraph -->

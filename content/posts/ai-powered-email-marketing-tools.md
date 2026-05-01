@@ -5,6 +5,7 @@ excerpt: "Perfect for SMBs, side-hustlers, and time-starved marketers Discover h
 category: "ai-tech-automation"
 date: "June 26, 2025"
 readTime: "4 min read"
+coverImage: "/images/ai-powered-email-marketing-tools.png"
 ---
 
 <!-- wp:paragraph -->

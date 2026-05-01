@@ -5,6 +5,7 @@ excerpt: "Discover the key differences between Notion AI and Microsoft Copilot 2
 category: "ai-tech-automation"
 date: "June 30, 2025"
 readTime: "4 min read"
+coverImage: "/images/notion-ai-vs-microsoft-copilot-2025.png"
 ---
 
 <!-- wp:paragraph -->

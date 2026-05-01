@@ -1,10 +1,11 @@
----
+﻿---
 title: "🦙 LLaMA 2 + RAG: The Power Couple Behind Modern AI Assistants"
-slug: "%f0%9f%a6%99-llama-2-rag-the-power-couple-behind-modern-ai-assistants"
+slug: "llama-2-rag-the-power-couple-behind-modern-ai-assistants"
 excerpt: "Discover how LLaMA 2 and Retrieval-Augmented Generation (RAG) work together to create smarter, more accurate, and up-to-date AI systems. Learn the tech, the why, and the impact. Introduction: When Your AI Knows and Remem..."
 category: "ai-tech-automation"
 date: "July 16, 2025"
 readTime: "5 min read"
+coverImage: "/images/llama-2-rag-the-power-couple-behind-modern-ai-assistants.png"
 ---
 
 <!-- wp:paragraph -->

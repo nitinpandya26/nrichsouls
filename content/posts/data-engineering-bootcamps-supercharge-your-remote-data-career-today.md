@@ -5,6 +5,7 @@ excerpt: "Discover the top data engineering bootcamps to elevate your remote car
 category: "career-growth-remote-work"
 date: "July 22, 2025"
 readTime: "4 min read"
+coverImage: "/images/data-engineering-bootcamps-supercharge-your-remote-data-career-today.png"
 ---
 
 <!-- wp:paragraph -->

@@ -5,6 +5,7 @@ excerpt: "Want your resume to pass AI screeners in 2025? Learn the latest tips t
 category: "career-growth-remote-work"
 date: "June 15, 2025"
 readTime: "4 min read"
+coverImage: "/images/how-to-get-noticed-by-ai-resume.png"
 ---
 
 <!-- wp:paragraph -->

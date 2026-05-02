@@ -257,7 +257,7 @@ coverImage: "/images/digital-marketing-certifications.png"
 <!-- /wp:list -->
 
 <!-- wp:image {"id":1119,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-1024x683.png" alt="Infographic summarizing digital marketing certifications for side hustles, highlighting their importance, best certifications, and steps to launch a side hustle." class="wp-image-1119"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image.png" alt="Infographic summarizing digital marketing certifications for side hustles, highlighting their importance, best certifications, and steps to launch a side hustle." class="wp-image-1119"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

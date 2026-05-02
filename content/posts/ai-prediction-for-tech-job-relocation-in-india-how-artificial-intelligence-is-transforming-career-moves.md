@@ -183,7 +183,7 @@ coverImage: "/images/ai-prediction-for-tech-job-relocation-in-india-how-artifici
 <!-- /wp:list -->
 
 <!-- wp:image {"id":1284,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-29-683x1024.png" alt="Infographic illustrating how AI predicts the best metro areas for tech job relocation in India, highlighting job market analytics, economic factors, technology ecosystem health, workplace flexibility, and lifestyle indices." class="wp-image-1284"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-29.png" alt="Infographic illustrating how AI predicts the best metro areas for tech job relocation in India, highlighting job market analytics, economic factors, technology ecosystem health, workplace flexibility, and lifestyle indices." class="wp-image-1284"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

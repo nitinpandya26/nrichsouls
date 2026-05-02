@@ -71,7 +71,7 @@ coverImage: "/images/notion-ai-vs-microsoft-copilot-2025.png"
 <!-- /wp:heading -->
 
 <!-- wp:image {"id":706,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-8-683x1024.png" alt="A worried character stands in front of two buttons labeled 'Notion AI' and 'Microsoft Copilot', illustrating a dilemma over which AI tool to choose." class="wp-image-706"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-8.png" alt="A worried character stands in front of two buttons labeled 'Notion AI' and 'Microsoft Copilot', illustrating a dilemma over which AI tool to choose." class="wp-image-706"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"className":""} -->

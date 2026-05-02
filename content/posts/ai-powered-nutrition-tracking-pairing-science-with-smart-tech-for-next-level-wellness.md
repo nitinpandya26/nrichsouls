@@ -89,7 +89,7 @@ coverImage: "/images/ai-powered-nutrition-tracking-pairing-science-with-smart-te
 <!-- /wp:list -->
 
 <!-- wp:image {"id":1087,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-22-683x1024.png" alt="An infographic about AI-powered nutrition tracking featuring an illustration of a brain with 'AI' text, a bowl of fruits including an apple and an orange, and a smartphone displaying food tracking data. It highlights features such as tracking calories, nutrient intake, and dietary patterns using image recognition technology." class="wp-image-1087"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-22.png" alt="An infographic about AI-powered nutrition tracking featuring an illustration of a brain with 'AI' text, a bowl of fruits including an apple and an orange, and a smartphone displaying food tracking data. It highlights features such as tracking calories, nutrient intake, and dietary patterns using image recognition technology." class="wp-image-1087"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

@@ -59,7 +59,7 @@ coverImage: "/images/prompt-engineering-101.png"
 <!-- /wp:list -->
 
 <!-- wp:image {"id":717,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-11-1024x683.png" alt="An infographic titled 'Prompt Engineering 101' featuring sections on effective strategies, best practices, examples of effective prompts, steps for improving AI prompts, and future trends in prompt engineering." class="wp-image-717"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-11.png" alt="An infographic titled 'Prompt Engineering 101' featuring sections on effective strategies, best practices, examples of effective prompts, steps for improving AI prompts, and future trends in prompt engineering." class="wp-image-717"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"className":""} -->

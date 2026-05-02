@@ -205,7 +205,7 @@ coverImage: "/images/decode-health-insurance.png"
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":1062,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/ChatGPT-Image-May-31-2025-10_25_55-PM-1024x683.png" alt="Infographic on decoding health insurance fine print with four key steps: read the full policy document, focus on key sections, use simple language tools, and create a summary cheat sheet." class="wp-image-1062"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/ChatGPT-Image-May-31-2025-10_25_55-PM.png" alt="Infographic on decoding health insurance fine print with four key steps: read the full policy document, focus on key sections, use simple language tools, and create a summary cheat sheet." class="wp-image-1062"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

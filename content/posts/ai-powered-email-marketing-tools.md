@@ -125,7 +125,7 @@ coverImage: "/images/ai-powered-email-marketing-tools.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":730,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-13.png" alt="Infographic highlighting AI-driven email marketing tools, including popular tools like Mailchimp, Sendinblue, and Tidio, along with sections on design, copywriting, and automation steps." class="wp-image-730"/></figure>
+<figure class="wp-block-image size-full"><img src="/images/content/image-13.png" alt="Infographic highlighting AI-driven email marketing tools, including popular tools like Mailchimp, Sendinblue, and Tidio, along with sections on design, copywriting, and automation steps." class="wp-image-730"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"className":""} -->

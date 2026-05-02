@@ -207,7 +207,7 @@ coverImage: "/images/10-no-code-tools.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":659,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-3-683x1024.png" alt="Infographic illustrating no-code automation benefits, top no-code platforms, and steps to automate small business tasks." class="wp-image-659"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-3.png" alt="Infographic illustrating no-code automation benefits, top no-code platforms, and steps to automate small business tasks." class="wp-image-659"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

@@ -259,7 +259,7 @@ coverImage: "/images/evidence-based-nutritional-education.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1078,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-21-1024x683.png" alt="Illustration depicting the benefits of evidence-based nutritional education, with icons representing immune function (shield), inflammation (leaf), and longevity (hourglass), accompanied by text emphasizing the role of specific foods and supplements." class="wp-image-1078"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-21.png" alt="Illustration depicting the benefits of evidence-based nutritional education, with icons representing immune function (shield), inflammation (leaf), and longevity (hourglass), accompanied by text emphasizing the role of specific foods and supplements." class="wp-image-1078"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

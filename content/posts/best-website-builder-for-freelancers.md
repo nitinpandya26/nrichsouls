@@ -75,7 +75,7 @@ coverImage: "/images/best-website-builder-for-freelancers.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1067,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-19-1024x683.png" alt="Infographic listing key features of the best website builders for freelancers targeting international clients, including multilingual capabilities, customizable templates, mobile and SEO optimization, payment and e-commerce integration, and ease of use." class="wp-image-1067"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-19.png" alt="Infographic listing key features of the best website builders for freelancers targeting international clients, including multilingual capabilities, customizable templates, mobile and SEO optimization, payment and e-commerce integration, and ease of use." class="wp-image-1067"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

@@ -339,7 +339,7 @@ coverImage: "/images/gpt4o-daily-life-uses.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":317,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2020/11/chatgpt-image-may-15-2025-06_02_54-pm.png?w=1024" alt="" class="wp-image-317" /></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/chatgpt-image-may-15-2025-06_02_54-pm.png" alt="" class="wp-image-317" /></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"className":""} -->

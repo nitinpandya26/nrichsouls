@@ -103,7 +103,7 @@ coverImage: "/images/how-cloud-storage-can-secure-your-medical-documents-easily.
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1159,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-7-683x1024.png" alt="Infographic highlighting the importance of cloud storage for medical documents, detailing key benefits such as improved data security, disaster recovery, increased efficiency, and data encryption. It also outlines steps for safely storing medical documents in the cloud, including selecting a HIPAA-compliant provider, implementing user access controls, encrypting medical files, and training staff on data security." class="wp-image-1159"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-7.png" alt="Infographic highlighting the importance of cloud storage for medical documents, detailing key benefits such as improved data security, disaster recovery, increased efficiency, and data encryption. It also outlines steps for safely storing medical documents in the cloud, including selecting a HIPAA-compliant provider, implementing user access controls, encrypting medical files, and training staff on data security." class="wp-image-1159"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

@@ -326,7 +326,7 @@ interface.launch(share=True)
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1323,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-39-683x1024.png" alt="Infographic summarizing Gradio for PyTorch image classification, detailing installation, uses, and code snippets for model integration." class="wp-image-1323"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-39.png" alt="Infographic summarizing Gradio for PyTorch image classification, detailing installation, uses, and code snippets for model integration." class="wp-image-1323"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

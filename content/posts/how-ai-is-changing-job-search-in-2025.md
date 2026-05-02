@@ -165,7 +165,7 @@ coverImage: "/images/how-ai-is-changing-job-search-in-2025.png"
 <!-- /wp:list -->
 
 <!-- wp:image {"id":742,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-15-683x1024.png" alt="Infographic titled 'How AI Is Changing Job Search in 2025' highlighting key statistics and strategies for job seekers to navigate AI-driven recruitment." class="wp-image-742"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-15.png" alt="Infographic titled 'How AI Is Changing Job Search in 2025' highlighting key statistics and strategies for job seekers to navigate AI-driven recruitment." class="wp-image-742"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

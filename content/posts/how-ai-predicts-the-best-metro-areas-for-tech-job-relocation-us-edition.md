@@ -193,7 +193,7 @@ coverImage: "/images/how-ai-predicts-the-best-metro-areas-for-tech-job-relocatio
 <!-- /wp:list -->
 
 <!-- wp:image {"id":1278,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-27.png" alt="Infographic outlining the key factors and actionable steps for AI prediction in tech job relocation, including platforms like Hired IQ, CityFlow AI, and RelocatePro AI." class="wp-image-1278"/></figure>
+<figure class="wp-block-image size-full"><img src="/images/content/image-27.png" alt="Infographic outlining the key factors and actionable steps for AI prediction in tech job relocation, including platforms like Hired IQ, CityFlow AI, and RelocatePro AI." class="wp-image-1278"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

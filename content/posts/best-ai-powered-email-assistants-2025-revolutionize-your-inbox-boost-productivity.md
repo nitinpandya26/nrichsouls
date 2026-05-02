@@ -109,7 +109,7 @@ coverImage: "/images/best-ai-powered-email-assistants-2025-revolutionize-your-in
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1175,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/ChatGPT-Image-Jun-7-2025-05_12_42-PM-715x1024.png" alt="Infographic detailing features and benefits of AI-powered email assistants including drafting, categorization, scheduling, integration, security, and productivity enhancements." class="wp-image-1175"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/ChatGPT-Image-Jun-7-2025-05_12_42-PM.png" alt="Infographic detailing features and benefits of AI-powered email assistants including drafting, categorization, scheduling, integration, security, and productivity enhancements." class="wp-image-1175"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

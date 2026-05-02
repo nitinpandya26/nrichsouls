@@ -321,7 +321,7 @@ coverImage: "/images/the-rise-of-sora-and-runway-ml.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":668,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-4.png" alt="Infographic comparing the pros and cons of Sora and Runway ML for AI video creation." class="wp-image-668"/></figure>
+<figure class="wp-block-image size-full"><img src="/images/content/image-4.png" alt="Infographic comparing the pros and cons of Sora and Runway ML for AI video creation." class="wp-image-668"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

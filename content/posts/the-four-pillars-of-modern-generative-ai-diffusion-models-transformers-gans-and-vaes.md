@@ -385,7 +385,7 @@ coverImage: "/images/the-four-pillars-of-modern-generative-ai-diffusion-models-t
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1346,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/07/image-683x1024.png" alt="" class="wp-image-1346"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image.png" alt="" class="wp-image-1346"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

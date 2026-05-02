@@ -255,7 +255,7 @@ coverImage: "/images/how-to-get-noticed-by-ai-resume.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":315,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/chatgpt-image-may-15-2025-05_59_33-pm.png?w=683" alt="" class="wp-image-315" /></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/chatgpt-image-may-15-2025-05_59_33-pm.png" alt="" class="wp-image-315" /></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"className":""} -->

@@ -45,7 +45,7 @@ coverImage: "/images/sleep-syncing.png"
 <!-- /wp:heading -->
 
 <!-- wp:image {"id":313,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/chatgpt-image-may-15-2025-05_55_41-pm.png?w=683" alt="" class="wp-image-313" /></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/chatgpt-image-may-15-2025-05_55_41-pm.png" alt="" class="wp-image-313" /></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3} -->

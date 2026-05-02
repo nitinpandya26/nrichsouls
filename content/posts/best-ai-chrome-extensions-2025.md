@@ -165,7 +165,7 @@ coverImage: "/images/best-ai-chrome-extensions-2025.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":688,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-7-683x1024.png" alt="Infographic illustrating the benefits and popular AI Chrome extensions, emphasizing productivity, efficiency, and automated tasks." class="wp-image-688"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-7.png" alt="Infographic illustrating the benefits and popular AI Chrome extensions, emphasizing productivity, efficiency, and automated tasks." class="wp-image-688"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

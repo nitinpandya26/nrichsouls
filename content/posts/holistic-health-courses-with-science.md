@@ -163,7 +163,7 @@ coverImage: "/images/holistic-health-courses-with-science.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1072,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-20-1024x683.png" alt="Infographic illustrating features of holistic health courses with science-backed methods, including evidence-based learning modules, practical skills development, expert-led instruction, and certification and career advancement." class="wp-image-1072"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-20.png" alt="Infographic illustrating features of holistic health courses with science-backed methods, including evidence-based learning modules, practical skills development, expert-led instruction, and certification and career advancement." class="wp-image-1072"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

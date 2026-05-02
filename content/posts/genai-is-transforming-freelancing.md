@@ -159,7 +159,7 @@ coverImage: "/images/genai-is-transforming-freelancing.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":682,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-6-1024x683.png" alt="An illustration depicting the double-edged sword of generative AI, highlighting benefits such as increased productivity, enhanced creativity, and greater accessibility on one side, and drawbacks including job displacement, misinformation, and ethical concerns on the other." class="wp-image-682"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-6.png" alt="An illustration depicting the double-edged sword of generative AI, highlighting benefits such as increased productivity, enhanced creativity, and greater accessibility on one side, and drawbacks including job displacement, misinformation, and ethical concerns on the other." class="wp-image-682"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

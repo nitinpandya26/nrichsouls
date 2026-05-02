@@ -186,7 +186,7 @@ print("🖼️ Caption:", caption)</code></code></pre>
 <!-- /wp:heading -->
 
 <!-- wp:image {"id":1311,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-36-1024x683.png" alt="Three colorful parrots perched on a branch: a blue and yellow macaw on the left, a red macaw in the middle, and a green parrot on the right, surrounded by greenery." class="wp-image-1311"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-36.png" alt="Three colorful parrots perched on a branch: a blue and yellow macaw on the left, a red macaw in the middle, and a green parrot on the right, surrounded by greenery." class="wp-image-1311"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:code -->
@@ -283,7 +283,7 @@ print(f"💡 A: {answer}")
 <!-- /wp:list -->
 
 <!-- wp:image {"id":1315,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/ChatGPT-Image-Jun-23-2025-09_30_05-PM-833x1024.png" alt="An infographic explaining BLIP and BLIP-2, featuring a group of colorful parrots perched on a branch, with text detailing their capabilities in image captioning and visual question answering." class="wp-image-1315"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/ChatGPT-Image-Jun-23-2025-09_30_05-PM.png" alt="An infographic explaining BLIP and BLIP-2, featuring a group of colorful parrots perched on a branch, with text detailing their capabilities in image captioning and visual question answering." class="wp-image-1315"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

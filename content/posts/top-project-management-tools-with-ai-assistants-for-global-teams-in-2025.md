@@ -283,7 +283,7 @@ coverImage: "/images/top-project-management-tools-with-ai-assistants-for-global-
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":1274,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/image-25-683x1024.png" alt="Infographic summarizing top AI-powered project management tools for global teams in 2025, highlighting key benefits and how to choose the right tool." class="wp-image-1274"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-25.png" alt="Infographic summarizing top AI-powered project management tools for global teams in 2025, highlighting key benefits and how to choose the right tool." class="wp-image-1274"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

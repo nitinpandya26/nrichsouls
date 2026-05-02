@@ -209,7 +209,7 @@ coverImage: "/images/ai-agents-vs-chatbots.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":323,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/chatgpt-image-may-15-2025-06_27_25-pm.png?w=1024" alt="" class="wp-image-323" /></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/chatgpt-image-may-15-2025-06_27_25-pm.png" alt="" class="wp-image-323" /></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

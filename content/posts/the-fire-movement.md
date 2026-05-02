@@ -53,7 +53,7 @@ coverImage: "/images/the-fire-movement.png"
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":446,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-2-1024x683.png" alt="Infographic illustrating the FIRE framework for financial independence: 'Start Early', 'Save &amp; Invest Aggressively', and 'Embrace Frugality', with key actions listed under each section." class="wp-image-446"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-2.png" alt="Infographic illustrating the FIRE framework for financial independence: 'Start Early', 'Save &amp; Invest Aggressively', and 'Embrace Frugality', with key actions listed under each section." class="wp-image-446"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:paragraph -->

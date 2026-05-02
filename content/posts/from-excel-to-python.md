@@ -247,7 +247,7 @@ coverImage: "/images/from-excel-to-python.png"
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":722,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-12-1024x683.png" alt="Infographic outlining the transition from Excel to Python for AI-powered data analytics, highlighting limitations of Excel, benefits of Python, step-by-step guide, real-world use cases, and FAQs." class="wp-image-722"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-12.png" alt="Infographic outlining the transition from Excel to Python for AI-powered data analytics, highlighting limitations of Excel, benefits of Python, step-by-step guide, real-world use cases, and FAQs." class="wp-image-722"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

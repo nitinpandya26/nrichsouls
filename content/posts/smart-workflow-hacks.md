@@ -139,7 +139,7 @@ coverImage: "/images/smart-workflow-hacks.png"
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":677,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-5.png" alt="An illustration depicting the power of automation in the workplace, featuring a person sitting at a laptop with icons around them representing email sorting, data analysis, scheduling, report generation, and customer support." class="wp-image-677"/></figure>
+<figure class="wp-block-image size-full"><img src="/images/content/image-5.png" alt="An illustration depicting the power of automation in the workplace, featuring a person sitting at a laptop with icons around them representing email sorting, data analysis, scheduling, report generation, and customer support." class="wp-image-677"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

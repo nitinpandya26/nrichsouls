@@ -275,7 +275,7 @@ coverImage: "/images/9-sleep-behaviours.png"
 <!-- /wp:paragraph -->
 
 <!-- wp:image {"id":711,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-10-683x1024.png" alt="" class="wp-image-711"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-10.png" alt="" class="wp-image-711"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

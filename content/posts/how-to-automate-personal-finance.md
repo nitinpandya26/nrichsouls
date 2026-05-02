@@ -263,7 +263,7 @@ coverImage: "/images/how-to-automate-personal-finance.png"
 <!-- /wp:list -->
 
 <!-- wp:image {"id":736,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/05/image-14-1024x683.png" alt="Infographic illustrating the process of automating personal finance using AI apps in India. It includes a robot and coins, outlining the benefits like time-saving and enhanced accuracy, alongside a framework with actionable steps." class="wp-image-736"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/image-14.png" alt="Infographic illustrating the process of automating personal finance using AI apps in India. It includes a robot and coins, outlining the benefits like time-saving and enhanced accuracy, alongside a framework with actionable steps." class="wp-image-736"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:separator -->

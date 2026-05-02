@@ -67,7 +67,7 @@ coverImage: "/images/notion-mail-the-future-of-email-is-here-with-ai-powered-ass
 <!-- /wp:separator -->
 
 <!-- wp:image {"id":1185,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="https://nrichsouls.in/wp-content/uploads/2025/06/ChatGPT-Image-Jun-7-2025-05_25_56-PM-710x1024.png" alt="An infographic promoting Notion Mail, highlighting key features such as AI Summarization, AI Drafting, Intelligent Categorization, and Deep Search for email management." class="wp-image-1185"/></figure>
+<figure class="wp-block-image size-large"><img src="/images/content/ChatGPT-Image-Jun-7-2025-05_25_56-PM.png" alt="An infographic promoting Notion Mail, highlighting key features such as AI Summarization, AI Drafting, Intelligent Categorization, and Deep Search for email management." class="wp-image-1185"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading -->

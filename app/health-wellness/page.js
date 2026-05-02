@@ -16,10 +16,11 @@ export default async function HealthWellnessPage() {
   const mdPosts = getPostsByCategory("health-wellness");
   let notionPosts = [];
   try { notionPosts = await getNotionPostsByCategory("health-wellness"); } catch {}
-  // Markdown has full HTML + cover images; show Notion-only posts for new Notion posts
-  const mdSlugs = new Set(mdPosts.map((p) => p.slug));
-  const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
-  const posts = [...mdPosts, ...notionOnlyPosts]
+  // Notion is the CMS — use its metadata (date, title, tags) for posts it knows about.
+  // Fall back to markdown for posts not yet in Notion.
+  const notionSlugs = new Set(notionPosts.map((p) => p.slug));
+  const mdOnlyPosts = mdPosts.filter((p) => !notionSlugs.has(p.slug));
+  const posts = [...notionPosts, ...mdOnlyPosts]
     .sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
 
   return (

@@ -16,9 +16,9 @@ export default async function CareerGrowthPage() {
   const mdPosts = getPostsByCategory("career-growth-remote-work");
   let notionPosts = [];
   try { notionPosts = await getNotionPostsByCategory("career-growth-remote-work"); } catch {}
-  const mdSlugs = new Set(mdPosts.map((p) => p.slug));
-  const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
-  const posts = [...mdPosts, ...notionOnlyPosts]
+  const notionSlugs = new Set(notionPosts.map((p) => p.slug));
+  const mdOnlyPosts = mdPosts.filter((p) => !notionSlugs.has(p.slug));
+  const posts = [...notionPosts, ...mdOnlyPosts]
     .sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
 
   return (

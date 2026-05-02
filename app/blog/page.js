@@ -23,14 +23,14 @@ export default async function BlogPage() {
 
   // Markdown posts have full HTML + cover images (source of truth for existing posts)
   const mdPosts = getAllPosts();
-  const mdSlugs = new Set(mdPosts.map((p) => p.slug));
 
   try {
     const notionPosts = await getNotionPosts();
-    // Only include Notion posts that don't have a markdown counterpart
-    const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
-    posts = [...mdPosts, ...notionOnlyPosts];
-    // Sort by date descending
+    // Notion is the CMS — its metadata (date, title, tags) takes priority.
+    // Only add markdown posts not yet in Notion as a fallback.
+    const notionSlugs = new Set(notionPosts.map((p) => p.slug));
+    const mdOnlyPosts = mdPosts.filter((p) => !notionSlugs.has(p.slug));
+    posts = [...notionPosts, ...mdOnlyPosts];
     posts.sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
   } catch (e) {
     error = e.message;

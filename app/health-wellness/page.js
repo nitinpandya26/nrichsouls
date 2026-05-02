@@ -19,7 +19,8 @@ export default async function HealthWellnessPage() {
   // Markdown has full HTML + cover images; show Notion-only posts for new Notion posts
   const mdSlugs = new Set(mdPosts.map((p) => p.slug));
   const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
-  const posts = [...mdPosts, ...notionOnlyPosts];
+  const posts = [...mdPosts, ...notionOnlyPosts]
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 
   return (
     <>

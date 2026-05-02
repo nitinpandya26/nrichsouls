@@ -197,8 +197,17 @@ function makeBlock(type, rt) {
   return { object: 'block', type, [type]: { rich_text: rt } };
 }
 
+function toAbsoluteUrl(src) {
+  if (!src) return null;
+  const clean = src.split('?')[0];
+  if (/^https?:\/\//.test(clean)) return clean;
+  if (clean.startsWith('/')) return `${SITE_BASE}${clean}`;
+  return null;
+}
+
 function imageBlock(src, altOrCaption) {
-  const url = src.split('?')[0];   // strip query params
+  const url = toAbsoluteUrl(src);
+  if (!url) return null;
   return {
     object: 'block', type: 'image',
     image: {
@@ -269,7 +278,8 @@ function elementToBlocks(el) {
     case 'img': {
       const src = el.getAttribute('src');
       const alt = el.getAttribute('alt') || '';
-      if (src && /^https?:\/\//.test(src)) blocks.push(imageBlock(src, alt));
+      const blk = src ? imageBlock(src, alt) : null;
+      if (blk) blocks.push(blk);
       break;
     }
     case 'figure': {
@@ -277,7 +287,8 @@ function elementToBlocks(el) {
       if (img) {
         const src = img.getAttribute('src');
         const cap = el.querySelector('figcaption')?.text?.trim() || img.getAttribute('alt') || '';
-        if (src && /^https?:\/\//.test(src)) blocks.push(imageBlock(src, cap));
+        const blk = src ? imageBlock(src, cap) : null;
+        if (blk) blocks.push(blk);
       }
       break;
     }
@@ -352,7 +363,8 @@ async function createNotionPage(post, coverUrl, allBlocks) {
 
   // Set Notion page cover (banner image at top of page)
   if (coverUrl) {
-    createPayload.cover = { type: 'external', external: { url: coverUrl.split('?')[0] } };
+    const coverAbs = toAbsoluteUrl(coverUrl);
+    if (coverAbs) createPayload.cover = { type: 'external', external: { url: coverAbs } };
   }
 
   const page = await notion.pages.create(createPayload);

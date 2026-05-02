@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getNotionPosts } from "../../lib/notion";
-import { getAllPosts } from "../../lib/posts";
+import { getAllPosts, parseDateTs } from "../../lib/posts";
 
 export const revalidate = 60; // regenerate at most every 60 seconds
 
@@ -31,7 +31,7 @@ export default async function BlogPage() {
     const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
     posts = [...mdPosts, ...notionOnlyPosts];
     // Sort by date descending
-    posts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    posts.sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
   } catch (e) {
     error = e.message;
     posts = mdPosts; // fall back to markdown-only if Notion is down

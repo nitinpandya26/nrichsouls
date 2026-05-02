@@ -1,5 +1,5 @@
 import BlogCard from "../components/BlogCard";
-import { getPostsByCategory } from "../../lib/posts";
+import { getPostsByCategory, parseDateTs } from "../../lib/posts";
 import { getNotionPostsByCategory } from "../../lib/notion";
 
 export const revalidate = 60;
@@ -19,7 +19,7 @@ export default async function CareerGrowthPage() {
   const mdSlugs = new Set(mdPosts.map((p) => p.slug));
   const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
   const posts = [...mdPosts, ...notionOnlyPosts]
-    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    .sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
 
   return (
     <>

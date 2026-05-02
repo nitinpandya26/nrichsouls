@@ -1,5 +1,8 @@
 import BlogCard from "../components/BlogCard";
 import { getPostsByCategory } from "../../lib/posts";
+import { getNotionPostsByCategory } from "../../lib/notion";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "AI, Tech & Automation — NrichSouls",
@@ -9,8 +12,13 @@ export const metadata = {
 
 const ACCENT = "#8b5cf6";
 
-export default function AITechPage() {
-  const posts = getPostsByCategory("ai-tech-automation");
+export default async function AITechPage() {
+  const mdPosts = getPostsByCategory("ai-tech-automation");
+  let notionPosts = [];
+  try { notionPosts = await getNotionPostsByCategory("ai-tech-automation"); } catch {}
+  const mdSlugs = new Set(mdPosts.map((p) => p.slug));
+  const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
+  const posts = [...mdPosts, ...notionOnlyPosts];
 
   return (
     <>

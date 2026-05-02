@@ -3,21 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import CategoryBadge from "../../components/CategoryBadge";
 import { getPostBySlug, getAllPosts } from "../../../lib/posts";
+import { getNotionPostBySlug, getNotionPostContent } from "../../../lib/notion";
 
-export async function generateStaticParams() {
-  const posts = getAllPosts();
-  return posts.map((post) => ({ slug: post.slug }));
-}
-
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
-  if (!post) return {};
-  return {
-    title: `${post.title} — NrichSouls`,
-    description: post.excerpt,
-  };
-}
+export const revalidate = 60;    // Notion edits reflect within 60 seconds
+export const dynamicParams = true; // render new Notion slugs on first visit, no redeploy needed
 
 const BACK_LINKS = {
   "ai-tech-automation": { href: "/ai-tech-automation", label: "AI, Tech & Automation" },
@@ -25,26 +14,86 @@ const BACK_LINKS = {
   "health-wellness": { href: "/health-wellness", label: "Health & Wellness" },
 };
 
+const ACCENT_COLORS = {
+  "ai-tech-automation": "#8b5cf6",
+  "career-growth-remote-work": "#f59e0b",
+  "health-wellness": "#10b981",
+};
+
+export async function generateStaticParams() {
+  const markdownPosts = getAllPosts();
+  return markdownPosts.map((post) => ({ slug: post.slug }));
+}
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+
+  // Prefer markdown (authoritative for existing posts)
+  const mdPost = getPostBySlug(slug);
+  if (mdPost) {
+    return {
+      title: `${mdPost.title} — NrichSouls`,
+      description: mdPost.excerpt,
+    };
+  }
+
+  // Fall back to Notion (for posts written directly in Notion with no markdown file)
+  try {
+    const notionPost = await getNotionPostBySlug(slug);
+    if (notionPost) {
+      return {
+        title: `${notionPost.title} — NrichSouls`,
+        description: notionPost.excerpt,
+      };
+    }
+  } catch {}
+
+  return {};
+}
+
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+
+  let post = null;
+  let content = null;
+  let isNotion = false;
+
+  // ── Prefer markdown (full HTML structure + cover images) ──────────────────
+  const mdPost = getPostBySlug(slug);
+  if (mdPost) {
+    post = mdPost;
+    content = mdPost.content;
+  } else {
+    // ── Fall back to Notion (for posts written directly in Notion) ────────
+    try {
+      const notionPost = await getNotionPostBySlug(slug);
+      if (notionPost) {
+        content = await getNotionPostContent(notionPost.id);
+        post = notionPost;
+        isNotion = true;
+      }
+    } catch {}
+  }
+
   if (!post) notFound();
 
-  const back = BACK_LINKS[post.category] ?? { href: "/", label: "Home" };
+  const back = BACK_LINKS[post.category] ?? { href: "/blog", label: "Blog" };
+  const accent = ACCENT_COLORS[post.category] ?? "#6366f1";
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       {/* Back link */}
       <Link
         href={back.href}
-        className="inline-flex items-center gap-1 text-sm text-[#6366f1] hover:underline mb-8"
+        className="inline-flex items-center gap-1 text-sm hover:underline mb-8"
+        style={{ color: accent }}
       >
         ← Back to {back.label}
       </Link>
 
       {/* Category badge */}
       <div className="mb-4">
-        <CategoryBadge category={post.category} />
+        <CategoryBadge category={post.category} color={accent} />
       </div>
 
       {/* Title */}
@@ -55,8 +104,7 @@ export default async function BlogPostPage({ params }) {
       {/* Meta */}
       <div className="flex items-center gap-3 text-sm text-[#64748b] mb-8 pb-6 border-b border-slate-200">
         <span>{post.date}</span>
-        <span>·</span>
-        <span>{post.readTime}</span>
+        {post.readTime && <><span>·</span><span>{post.readTime}</span></>}
       </div>
 
       {/* Cover image */}
@@ -69,6 +117,7 @@ export default async function BlogPostPage({ params }) {
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 768px"
             priority
+            unoptimized={isNotion}
           />
         </div>
       )}
@@ -76,7 +125,7 @@ export default async function BlogPostPage({ params }) {
       {/* Content */}
       <article
         className="article-content"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
     </div>
   );

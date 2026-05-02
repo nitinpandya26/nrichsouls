@@ -62,3 +62,71 @@ body {
 .article-content li {
   margin-bottom: 0.4rem;
 }
+
+.article-content blockquote {
+  border-left: 4px solid #6366f1;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: #475569;
+  font-style: italic;
+}
+
+.article-content pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 1.25rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.article-content code {
+  background: #f1f5f9;
+  color: #6366f1;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+.article-content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+.article-content .callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #eef2ff;
+  border-left: 4px solid #6366f1;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.article-content .callout-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.article-content h3.article-h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-content figure {
+  margin: 1.5rem 0;
+}
+
+.article-content figcaption {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+}

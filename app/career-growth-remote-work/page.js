@@ -1,5 +1,8 @@
 import BlogCard from "../components/BlogCard";
 import { getPostsByCategory } from "../../lib/posts";
+import { getNotionPostsByCategory } from "../../lib/notion";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "Career Growth & Remote Work — NrichSouls",
@@ -9,8 +12,13 @@ export const metadata = {
 
 const ACCENT = "#f59e0b";
 
-export default function CareerGrowthPage() {
-  const posts = getPostsByCategory("career-growth-remote-work");
+export default async function CareerGrowthPage() {
+  const mdPosts = getPostsByCategory("career-growth-remote-work");
+  let notionPosts = [];
+  try { notionPosts = await getNotionPostsByCategory("career-growth-remote-work"); } catch {}
+  const mdSlugs = new Set(mdPosts.map((p) => p.slug));
+  const notionOnlyPosts = notionPosts.filter((p) => !mdSlugs.has(p.slug));
+  const posts = [...mdPosts, ...notionOnlyPosts];
 
   return (
     <>

@@ -25,6 +25,7 @@ export default function BlogCard({ post, accentColor }) {
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            unoptimized
           />
           <div
             className="absolute bottom-0 left-0 right-0 h-1"

@@ -26,6 +26,9 @@ const nextConfig = {
       // Common image CDNs used in Notion embeds
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "**.unsplash.com" },
+      // Site-hosted cover images (e.g. https://nrichsouls.in/images/slug.png)
+      { protocol: "https", hostname: "nrichsouls.in" },
+      { protocol: "https", hostname: "www.nrichsouls.in" },
     ],
   },
 };

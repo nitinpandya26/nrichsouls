@@ -48,7 +48,7 @@ export default function BlogCard({ post, accentColor }) {
 
         <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-auto">
           <span className="text-xs text-[#94a3b8]">
-            {post.date} · {post.readTime}
+            {post.date}{post.readTime ? ` · ${post.readTime}` : ''}
           </span>
           <Link
             href={`/blog/${post.slug}`}

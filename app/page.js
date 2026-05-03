@@ -1,7 +1,10 @@
 import Link from "next/link";
 import BlogCard from "./components/BlogCard";
 import NewsletterForm from "./components/NewsletterForm";
-import { getFeaturedPosts } from "../lib/posts";
+import { getAllPosts, parseDateTs } from "../lib/posts";
+import { getNotionPosts } from "../lib/notion";
+
+export const revalidate = 60;
 
 const CATEGORIES = [
   {
@@ -33,8 +36,15 @@ const CATEGORIES = [
   },
 ];
 
-export default function HomePage() {
-  const featured = getFeaturedPosts(3);
+export default async function HomePage() {
+  const mdPosts = getAllPosts();
+  let notionPosts = [];
+  try { notionPosts = await getNotionPosts(); } catch {}
+  const notionSlugs = new Set(notionPosts.map((p) => p.slug));
+  const mdOnlyPosts = mdPosts.filter((p) => !notionSlugs.has(p.slug));
+  const featured = [...notionPosts, ...mdOnlyPosts]
+    .sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date))
+    .slice(0, 3);
 
   return (
     <>

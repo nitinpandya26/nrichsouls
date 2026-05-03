@@ -1,5 +1,5 @@
 import BlogCard from "../components/BlogCard";
-import { getPostsByCategory, parseDateTs } from "../../lib/posts";
+import { getPostsByCategory, mergeAndSort } from "../../lib/posts";
 import { getNotionPostsByCategory } from "../../lib/notion";
 
 export const revalidate = 60;
@@ -16,10 +16,7 @@ export default async function AITechPage() {
   const mdPosts = getPostsByCategory("ai-tech-automation");
   let notionPosts = [];
   try { notionPosts = await getNotionPostsByCategory("ai-tech-automation"); } catch {}
-  const notionSlugs = new Set(notionPosts.map((p) => p.slug));
-  const mdOnlyPosts = mdPosts.filter((p) => !notionSlugs.has(p.slug));
-  const posts = [...notionPosts, ...mdOnlyPosts]
-    .sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
+  const posts = mergeAndSort(notionPosts, mdPosts);
 
   return (
     <>

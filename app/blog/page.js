@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getNotionPosts } from "../../lib/notion";
-import { getAllPosts, parseDateTs } from "../../lib/posts";
+import { getAllPosts, mergeAndSort } from "../../lib/posts";
 
 export const revalidate = 60; // regenerate at most every 60 seconds
 
@@ -28,10 +28,7 @@ export default async function BlogPage() {
     const notionPosts = await getNotionPosts();
     // Notion is the CMS — its metadata (date, title, tags) takes priority.
     // Only add markdown posts not yet in Notion as a fallback.
-    const notionSlugs = new Set(notionPosts.map((p) => p.slug));
-    const mdOnlyPosts = mdPosts.filter((p) => !notionSlugs.has(p.slug));
-    posts = [...notionPosts, ...mdOnlyPosts];
-    posts.sort((a, b) => parseDateTs(b.date) - parseDateTs(a.date));
+    posts = mergeAndSort(notionPosts, mdPosts);
   } catch (e) {
     error = e.message;
     posts = mdPosts; // fall back to markdown-only if Notion is down

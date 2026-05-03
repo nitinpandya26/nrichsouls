@@ -1,4 +1,5 @@
 import BlogCard from "../components/BlogCard";
+import NewsletterSection from "../components/NewsletterSection";
 import { getPostsByCategory, mergeAndSort } from "../../lib/posts";
 import { getNotionPostsByCategory } from "../../lib/notion";
 
@@ -73,6 +74,7 @@ export default async function CareerGrowthPage() {
           <p className="text-[#64748b]">No posts yet. Check back soon!</p>
         )}
       </div>
+      <NewsletterSection />
     </>
   );
 }

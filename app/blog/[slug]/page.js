@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import CategoryBadge from "../../components/CategoryBadge";
+import NewsletterSection from "../../components/NewsletterSection";
 import { getPostBySlug, getAllPosts } from "../../../lib/posts";
 import { getNotionPostBySlug, getNotionPostContent } from "../../../lib/notion";
 
@@ -81,6 +82,7 @@ export default async function BlogPostPage({ params }) {
   const accent = ACCENT_COLORS[post.category] ?? "#6366f1";
 
   return (
+    <>
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       {/* Back link */}
       <Link
@@ -128,5 +130,7 @@ export default async function BlogPostPage({ params }) {
         dangerouslySetInnerHTML={{ __html: content }}
       />
     </div>
+    <NewsletterSection />
+    </>
   );
 }

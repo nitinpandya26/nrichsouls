@@ -1,7 +1,6 @@
 import BlogCard from "../components/BlogCard";
 import NewsletterSection from "../components/NewsletterSection";
-import { getPostsByCategory, mergeAndSort } from "../../lib/posts";
-import { getNotionPostsByCategory } from "../../lib/notion";
+import { getPostsByCategory } from "../../lib/db-posts";
 
 export const revalidate = 60;
 
@@ -14,16 +13,12 @@ export const metadata = {
 const ACCENT = "#f59e0b";
 
 export default async function CareerGrowthPage() {
-  const mdPosts = getPostsByCategory("career-growth-remote-work");
-  let notionPosts = [];
-  try { notionPosts = await getNotionPostsByCategory("career-growth-remote-work"); } catch {}
-  const posts = mergeAndSort(notionPosts, mdPosts);
+  const posts = await getPostsByCategory("career-growth-remote-work");
 
   return (
     <>
       {/* ── Category Hero Banner ── */}
       <section className="relative bg-gradient-to-r from-orange-500 to-amber-600 text-white overflow-hidden">
-        {/* Dot pattern */}
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -32,16 +27,12 @@ export default async function CareerGrowthPage() {
           }}
         />
 
-        {/* Decorative bar-chart / growth shapes (right side) */}
         <div className="absolute right-0 top-0 bottom-0 w-72 overflow-hidden hidden lg:block">
-          {/* Bar chart */}
           <div className="absolute bottom-0 right-10 w-8 h-24 bg-white/15 rounded-t-lg" />
           <div className="absolute bottom-0 right-22 w-8 h-36 bg-white/15 rounded-t-lg" />
           <div className="absolute bottom-0 right-[136px] w-8 h-20 bg-white/15 rounded-t-lg" />
           <div className="absolute bottom-0 right-[180px] w-8 h-44 bg-white/15 rounded-t-lg" />
-          {/* Trend line */}
           <div className="absolute bottom-[80px] right-8 h-px w-56 bg-white/25 rotate-[-20deg] origin-right" />
-          {/* Arrow tip */}
           <div className="absolute top-8 right-12 text-white/25 text-5xl font-black leading-none select-none">↗</div>
           <div className="absolute top-6 right-8 w-3 h-3 rounded-full bg-white/30" />
         </div>

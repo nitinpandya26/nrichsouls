@@ -1,7 +1,6 @@
 import BlogCard from "../components/BlogCard";
 import NewsletterSection from "../components/NewsletterSection";
-import { getPostsByCategory, mergeAndSort } from "../../lib/posts";
-import { getNotionPostsByCategory } from "../../lib/notion";
+import { getPostsByCategory } from "../../lib/db-posts";
 
 export const revalidate = 60;
 
@@ -14,16 +13,12 @@ export const metadata = {
 const ACCENT = "#8b5cf6";
 
 export default async function AITechPage() {
-  const mdPosts = getPostsByCategory("ai-tech-automation");
-  let notionPosts = [];
-  try { notionPosts = await getNotionPostsByCategory("ai-tech-automation"); } catch {}
-  const posts = mergeAndSort(notionPosts, mdPosts);
+  const posts = await getPostsByCategory("ai-tech-automation");
 
   return (
     <>
       {/* ── Category Hero Banner ── */}
       <section className="relative bg-gradient-to-r from-indigo-600 to-purple-700 text-white overflow-hidden">
-        {/* Dot pattern */}
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -32,7 +27,6 @@ export default async function AITechPage() {
           }}
         />
 
-        {/* Decorative circuit shapes (right side) */}
         <div className="absolute right-0 top-0 bottom-0 w-72 overflow-hidden hidden lg:block">
           <div className="absolute top-6 right-8 w-36 h-36 border-2 border-white/20 rounded-xl" />
           <div className="absolute top-14 right-14 w-20 h-20 border-2 border-white/20 rounded-lg" />

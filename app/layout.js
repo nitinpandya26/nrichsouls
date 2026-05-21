@@ -1,7 +1,6 @@
 import { Geist } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import ConditionalShell from "./components/ConditionalShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,9 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#f8fafc] text-[#1e293b]">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <ConditionalShell>{children}</ConditionalShell>
       </body>
     </html>
   );

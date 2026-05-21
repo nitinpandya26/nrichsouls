@@ -17,16 +17,12 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      // Notion-hosted images (pre-signed S3 — use unoptimized on these)
-      { protocol: "https", hostname: "prod-files-secure.s3.us-west-2.amazonaws.com" },
-      { protocol: "https", hostname: "*.amazonaws.com" },
-      // Notion page covers and external images pasted into Notion
-      { protocol: "https", hostname: "www.notion.so" },
-      { protocol: "https", hostname: "notion.so" },
-      // Common image CDNs used in Notion embeds
+      // Supabase Storage (uploaded images + DALL-E generated images)
+      { protocol: "https", hostname: "*.supabase.co" },
+      // Common external image CDNs used in blog content
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "**.unsplash.com" },
-      // Site-hosted cover images (e.g. https://nrichsouls.in/images/slug.png)
+      // Site-hosted images
       { protocol: "https", hostname: "nrichsouls.in" },
       { protocol: "https", hostname: "www.nrichsouls.in" },
     ],

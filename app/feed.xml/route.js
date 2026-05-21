@@ -1,5 +1,4 @@
-import { getAllPosts, mergeAndSort } from "../../lib/posts";
-import { getNotionPosts } from "../../lib/notion";
+import { getAllPosts } from "../../lib/db-posts";
 
 const SITE = "https://nrichsouls.in";
 
@@ -20,10 +19,7 @@ function toRssDate(dateStr) {
 }
 
 export async function GET() {
-  const mdPosts = getAllPosts();
-  let notionPosts = [];
-  try { notionPosts = await getNotionPosts(); } catch {}
-  const posts = mergeAndSort(notionPosts, mdPosts);
+  const posts = await getAllPosts();
 
   const items = posts
     .map((post) => {

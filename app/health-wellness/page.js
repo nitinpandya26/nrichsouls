@@ -1,7 +1,6 @@
 import BlogCard from "../components/BlogCard";
 import NewsletterSection from "../components/NewsletterSection";
-import { getPostsByCategory, mergeAndSort } from "../../lib/posts";
-import { getNotionPostsByCategory } from "../../lib/notion";
+import { getPostsByCategory } from "../../lib/db-posts";
 
 export const revalidate = 60;
 
@@ -14,16 +13,12 @@ export const metadata = {
 const ACCENT = "#10b981";
 
 export default async function HealthWellnessPage() {
-  const mdPosts = getPostsByCategory("health-wellness");
-  let notionPosts = [];
-  try { notionPosts = await getNotionPostsByCategory("health-wellness"); } catch {}
-  const posts = mergeAndSort(notionPosts, mdPosts);
+  const posts = await getPostsByCategory("health-wellness");
 
   return (
     <>
       {/* ── Category Hero Banner ── */}
       <section className="relative bg-gradient-to-r from-emerald-500 to-teal-600 text-white overflow-hidden">
-        {/* Dot pattern */}
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -32,7 +27,6 @@ export default async function HealthWellnessPage() {
           }}
         />
 
-        {/* Decorative circles / wellness shapes (right side) */}
         <div className="absolute right-0 top-0 bottom-0 w-72 overflow-hidden hidden lg:block">
           <div className="absolute top-4 right-4 w-44 h-44 border-2 border-white/20 rounded-full" />
           <div className="absolute top-10 right-10 w-28 h-28 border-2 border-white/20 rounded-full" />

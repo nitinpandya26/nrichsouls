@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getNotionPosts } from "../../lib/notion";
-import { getAllPosts, mergeAndSort } from "../../lib/posts";
+import { getAllPosts } from "../../lib/db-posts";
 
-export const revalidate = 60; // regenerate at most every 60 seconds
+export const revalidate = 60;
 
 export const metadata = {
   title: "Blog — NrichSouls",
@@ -18,21 +17,7 @@ const ACCENT = {
 };
 
 export default async function BlogPage() {
-  let posts = [];
-  let error = null;
-
-  // Markdown posts have full HTML + cover images (source of truth for existing posts)
-  const mdPosts = getAllPosts();
-
-  try {
-    const notionPosts = await getNotionPosts();
-    // Notion is the CMS — its metadata (date, title, tags) takes priority.
-    // Only add markdown posts not yet in Notion as a fallback.
-    posts = mergeAndSort(notionPosts, mdPosts);
-  } catch (e) {
-    error = e.message;
-    posts = mdPosts; // fall back to markdown-only if Notion is down
-  }
+  const posts = await getAllPosts();
 
   return (
     <>
@@ -61,12 +46,7 @@ export default async function BlogPage() {
       {/* ── Posts ── */}
       <section className="bg-[#f8fafc] py-14 px-4">
         <div className="max-w-6xl mx-auto">
-          {error ? (
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
-              <p className="text-red-600 font-semibold mb-1">Could not load posts</p>
-              <p className="text-red-400 text-sm">{error}</p>
-            </div>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <p className="text-[#64748b] text-center py-12">
               No published posts yet — check back soon!
             </p>
@@ -76,7 +56,7 @@ export default async function BlogPage() {
                 const accent = ACCENT[post.category] ?? { color: "#6366f1", label: post.category };
                 return (
                   <div
-                    key={post.slug || post.id}
+                    key={post.slug}
                     className="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                     style={post.coverImage ? {} : { borderTop: `4px solid ${accent.color}` }}
                   >

@@ -1,8 +1,7 @@
 import Link from "next/link";
 import BlogCard from "./components/BlogCard";
 import NewsletterSection from "./components/NewsletterSection";
-import { getAllPosts, mergeAndSort } from "../lib/posts";
-import { getNotionPosts } from "../lib/notion";
+import { getFeaturedPosts } from "../lib/db-posts";
 
 export const revalidate = 60;
 
@@ -37,10 +36,7 @@ const CATEGORIES = [
 ];
 
 export default async function HomePage() {
-  const mdPosts = getAllPosts();
-  let notionPosts = [];
-  try { notionPosts = await getNotionPosts(); } catch {}
-  const featured = mergeAndSort(notionPosts, mdPosts).slice(0, 3);
+  const featured = await getFeaturedPosts(3);
 
   return (
     <>
@@ -112,7 +108,6 @@ export default async function HomePage() {
                 href={cat.href}
                 className={`group relative bg-gradient-to-br ${cat.gradient} rounded-2xl p-8 text-white overflow-hidden transition-all duration-200 hover:scale-[1.02] hover:shadow-2xl ${cat.shadow}`}
               >
-                {/* Subtle inner glow */}
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity rounded-2xl" />
                 <div className="relative">
                   <span className="text-5xl mb-4 block">{cat.emoji}</span>
@@ -176,7 +171,7 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-[#1e293b]">Latest Articles</h2>
-            <Link href="/ai-tech-automation" className="text-sm text-[#6366f1] font-medium hover:underline">
+            <Link href="/blog" className="text-sm text-[#6366f1] font-medium hover:underline">
               View all →
             </Link>
           </div>

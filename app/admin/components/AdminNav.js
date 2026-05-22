@@ -10,8 +10,9 @@ export default function AdminNav({ email }) {
     { href: '/admin',          label: 'Dashboard', icon: '▦' },
     { href: '/admin/ideas',    label: 'Ideas',     icon: '💡' },
     { href: '/admin/ideas/new', label: 'New Idea', icon: '+',  highlight: true },
-    { href: '/admin/posts/new', label: 'New Post', icon: '✏️', highlight: true },
-    { href: '/admin/settings', label: 'Settings',  icon: '⚙️' },
+    { href: '/admin/posts/new',    label: 'New Post', icon: '✏️', highlight: true },
+    { href: '/admin/carousel/new', label: 'Carousel', icon: '🎠', highlight: true },
+    { href: '/admin/settings',     label: 'Settings',  icon: '⚙️' },
   ];
 
   return (

@@ -3,7 +3,7 @@ import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import JSZip from 'jszip';
-import ImageGenerator from '../../components/ImageGenerator';
+import ImageGenerator, { IMAGE_MODELS } from '../../components/ImageGenerator';
 
 const PLATFORMS = [
   { key: 'generated_blog',      label: 'Blog Post',   icon: '📝' },
@@ -199,6 +199,10 @@ export default function IdeaDetailPage({ params }) {
   const [savingCarousel, setSavingCarousel] = useState(false);
   const [carouselSaved, setCarouselSaved] = useState(false);
   const [carouselPromptError, setCarouselPromptError] = useState('');
+  const [carouselPromptModel, setCarouselPromptModel] = useState('anthropic:claude-sonnet-4-6');
+  const [carouselImgModel, setCarouselImgModel] = useState('dall-e-3');
+  const [carouselImgSize, setCarouselImgSize] = useState('1024x1024');
+  const [carouselImgQuality, setCarouselImgQuality] = useState('standard');
 
   // idle | checking | confirming | deleting | pushing | error
   const [pushState, setPushState] = useState('idle');
@@ -287,7 +291,7 @@ export default function IdeaDetailPage({ params }) {
       const res = await fetch('/api/admin/generate-carousel-prompts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blogHtml: idea.generated_blog, title: idea.title, count: 6 }),
+        body: JSON.stringify({ blogHtml: idea.generated_blog, title: idea.title, count: 6, provider: carouselPromptModel }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Failed to generate prompts');
@@ -305,7 +309,7 @@ export default function IdeaDetailPage({ params }) {
       const res = await fetch('/api/admin/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: carouselItems[index].prompt, model: 'dall-e-3', size: '1024x1024', quality: 'standard' }),
+        body: JSON.stringify({ prompt: carouselItems[index].prompt, model: carouselImgModel, size: carouselImgSize, quality: carouselImgQuality || undefined }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Generation failed');
@@ -691,38 +695,106 @@ export default function IdeaDetailPage({ params }) {
 
       {/* Instagram Carousel */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-          <div>
-            <h2 className="text-sm font-bold text-slate-800">Instagram Carousel Images</h2>
-            <p className="text-xs text-slate-400 mt-0.5">5–7 images for an Instagram carousel post</p>
-          </div>
-          <div className="flex items-center gap-2">
-            {carouselItems.length > 0 && generatedCarouselCount > 0 && (
-              <>
-                <button onClick={downloadCarouselZip}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">
-                  ↓ Download ZIP ({generatedCarouselCount})
+        <div className="px-5 py-4 border-b border-slate-100 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-sm font-bold text-slate-800">Instagram Carousel Images</h2>
+              <p className="text-xs text-slate-400 mt-0.5">5–7 images for an Instagram carousel post</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {carouselItems.length > 0 && generatedCarouselCount > 0 && (
+                <>
+                  <button onClick={downloadCarouselZip}
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">
+                    ↓ ZIP ({generatedCarouselCount})
+                  </button>
+                  <button onClick={saveCarousel} disabled={savingCarousel}
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors ${carouselSaved ? 'bg-emerald-50 text-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} disabled:opacity-50`}>
+                    {savingCarousel ? 'Saving…' : carouselSaved ? '✓ Saved' : 'Save'}
+                  </button>
+                </>
+              )}
+              {carouselItems.length > 0 && (
+                <button onClick={generateAllCarousel} disabled={generatingAll || generatingPrompts}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white flex items-center gap-1.5">
+                  {generatingAll
+                    ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating…</>
+                    : '🎨 Generate All'}
                 </button>
-                <button onClick={saveCarousel} disabled={savingCarousel}
-                  className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors ${carouselSaved ? 'bg-emerald-50 text-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} disabled:opacity-50`}>
-                  {savingCarousel ? 'Saving…' : carouselSaved ? '✓ Saved' : 'Save Carousel'}
-                </button>
-              </>
-            )}
-            {carouselItems.length > 0 && (
-              <button onClick={generateAllCarousel} disabled={generatingAll || generatingPrompts}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white flex items-center gap-1.5">
-                {generatingAll
+              )}
+              <button onClick={generateCarouselPrompts} disabled={generatingPrompts || !idea.generated_blog}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white flex items-center gap-1.5">
+                {generatingPrompts
                   ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating…</>
-                  : '🎨 Generate All'}
+                  : carouselItems.length > 0 ? '↺ Prompts' : '✨ Generate Prompts'}
               </button>
-            )}
-            <button onClick={generateCarouselPrompts} disabled={generatingPrompts || !idea.generated_blog}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white flex items-center gap-1.5">
-              {generatingPrompts
-                ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating prompts…</>
-                : carouselItems.length > 0 ? '↺ Regenerate Prompts' : '✨ Generate Prompts'}
-            </button>
+            </div>
+          </div>
+
+          {/* Model pickers */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Prompt Model</label>
+              <select
+                value={carouselPromptModel}
+                onChange={(e) => setCarouselPromptModel(e.target.value)}
+                className="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 bg-white"
+              >
+                <optgroup label="Claude">
+                  <option value="anthropic:claude-sonnet-4-6">Claude Sonnet 4.6</option>
+                  <option value="anthropic:claude-opus-4-7">Claude Opus 4.7</option>
+                  <option value="anthropic:claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
+                </optgroup>
+                <optgroup label="OpenAI">
+                  <option value="openai:gpt-4o">GPT-4o</option>
+                  <option value="openai:gpt-4o-mini">GPT-4o Mini</option>
+                </optgroup>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Image Model</label>
+              <select
+                value={carouselImgModel}
+                onChange={(e) => {
+                  const cfg = IMAGE_MODELS.find((m) => m.value === e.target.value);
+                  setCarouselImgModel(e.target.value);
+                  setCarouselImgSize(cfg?.defaultSize ?? '1024x1024');
+                  setCarouselImgQuality(cfg?.defaultQuality ?? '');
+                }}
+                className="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 bg-white"
+              >
+                {IMAGE_MODELS.map((m) => (
+                  <option key={m.value} value={m.value}>{m.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Size</label>
+              <select
+                value={carouselImgSize}
+                onChange={(e) => setCarouselImgSize(e.target.value)}
+                className="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 bg-white"
+              >
+                {IMAGE_MODELS.find((m) => m.value === carouselImgModel)?.sizes.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Quality</label>
+              <select
+                value={carouselImgQuality}
+                onChange={(e) => setCarouselImgQuality(e.target.value)}
+                disabled={!IMAGE_MODELS.find((m) => m.value === carouselImgModel)?.qualities.length}
+                className="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 bg-white disabled:opacity-40"
+              >
+                {IMAGE_MODELS.find((m) => m.value === carouselImgModel)?.qualities.length
+                  ? IMAGE_MODELS.find((m) => m.value === carouselImgModel).qualities.map((q) => (
+                      <option key={q} value={q}>{q}</option>
+                    ))
+                  : <option value="">N/A</option>}
+              </select>
+            </div>
           </div>
         </div>
 

@@ -3,6 +3,14 @@ import { NextResponse } from 'next/server';
 import { authOptions } from '../../../../../../lib/auth';
 import { supabaseAdmin } from '../../../../../../lib/supabase';
 
+function insertImageAfterFirstP(html, imageUrl) {
+  if (!imageUrl) return html;
+  const idx = html.indexOf('</p>');
+  if (idx === -1) return html;
+  const figure = `\n<figure data-content-image="true" style="margin:24px 0;"><img src="${imageUrl}" alt="" style="max-width:100%;border-radius:12px;display:block;" /></figure>`;
+  return html.slice(0, idx + 4) + figure + html.slice(idx + 4);
+}
+
 // POST /api/admin/ideas/[id]/publish
 // Creates an UNPUBLISHED draft post from the idea's blog content.
 // Returns { ok, postId, slug } — caller should redirect to /admin/posts/[postId]/edit
@@ -43,7 +51,7 @@ export async function POST(request, { params }) {
         title,
         slug:        fallbackSlug,
         excerpt:     idea.raw_idea?.slice(0, 200) ?? '',
-        content:     idea.generated_blog,
+        content:     insertImageAfterFirstP(idea.generated_blog, idea.content_image),
         category:    idea.category ?? 'ai-tech-automation',
         date:        body.date ?? today,
         read_time:   body.readTime ?? '',

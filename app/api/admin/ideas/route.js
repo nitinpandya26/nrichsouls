@@ -47,6 +47,8 @@ export async function POST(request) {
       generated_twitter:  body.generated_twitter ?? null,
       generated_instagram:body.generated_instagram ?? null,
       cover_image:        body.cover_image ?? '',
+      content_image:      body.content_image ?? '',
+      carousel_images:    body.carousel_images ?? [],
       status:             'draft',
     })
     .select()

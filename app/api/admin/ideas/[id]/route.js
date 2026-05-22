@@ -37,7 +37,7 @@ export async function PATCH(request, { params }) {
   const allowed = [
     'title', 'raw_idea', 'category', 'tone', 'ai_provider',
     'generated_blog', 'generated_linkedin', 'generated_twitter', 'generated_instagram',
-    'cover_image', 'status', 'post_id',
+    'cover_image', 'content_image', 'carousel_images', 'status', 'post_id',
   ];
   const updates = Object.fromEntries(
     Object.entries(body).filter(([k]) => allowed.includes(k))

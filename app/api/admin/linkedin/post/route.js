@@ -3,14 +3,49 @@ import { NextResponse } from 'next/server';
 import { authOptions } from '../../../../../lib/auth';
 import { supabaseAdmin } from '../../../../../lib/supabase';
 
+async function uploadImageToLinkedIn(token, personUrn, imageUrl) {
+  const imgRes = await fetch(imageUrl);
+  if (!imgRes.ok) throw new Error(`Failed to fetch image: ${imgRes.status}`);
+  const arrayBuffer = await imgRes.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  const initRes = await fetch('https://api.linkedin.com/rest/images?action=initializeUpload', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'LinkedIn-Version': '202304',
+      'X-Restli-Protocol-Version': '2.0.0',
+    },
+    body: JSON.stringify({ initializeUploadRequest: { owner: personUrn } }),
+  });
+
+  if (!initRes.ok) {
+    const err = await initRes.json().catch(() => ({}));
+    throw new Error(err.message ?? `LinkedIn initializeUpload error ${initRes.status}`);
+  }
+
+  const initData = await initRes.json();
+  const { uploadUrl, image: imageUrn } = initData.value;
+
+  const putRes = await fetch(uploadUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/octet-stream' },
+    body: buffer,
+  });
+
+  if (!putRes.ok) throw new Error(`LinkedIn image upload PUT error ${putRes.status}`);
+
+  return imageUrn;
+}
+
 export async function POST(request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { text } = await request.json().catch(() => ({}));
+  const { text, imageUrl } = await request.json().catch(() => ({}));
   if (!text?.trim()) return NextResponse.json({ error: 'text is required' }, { status: 400 });
 
-  // Load token + person URN from settings
   const { data } = await supabaseAdmin
     .from('settings')
     .select('key, value')
@@ -31,7 +66,32 @@ export async function POST(request) {
     );
   }
 
-  // Post via LinkedIn Posts API (2023+)
+  let imageUrn = null;
+  if (imageUrl?.trim()) {
+    try {
+      imageUrn = await uploadImageToLinkedIn(s.linkedin_access_token, s.linkedin_person_urn, imageUrl.trim());
+    } catch (e) {
+      return NextResponse.json({ error: `Image upload failed: ${e.message}` }, { status: 502 });
+    }
+  }
+
+  const postBody = {
+    author: s.linkedin_person_urn,
+    commentary: text.trim(),
+    visibility: 'PUBLIC',
+    distribution: {
+      feedDistribution: 'MAIN_FEED',
+      targetEntities: [],
+      thirdPartyDistributionChannels: [],
+    },
+    lifecycleState: 'PUBLISHED',
+    isReshareDisabledByAuthor: false,
+  };
+
+  if (imageUrn) {
+    postBody.content = { media: { id: imageUrn } };
+  }
+
   const liRes = await fetch('https://api.linkedin.com/rest/posts', {
     method: 'POST',
     headers: {
@@ -40,18 +100,7 @@ export async function POST(request) {
       'LinkedIn-Version': '202304',
       'X-Restli-Protocol-Version': '2.0.0',
     },
-    body: JSON.stringify({
-      author: s.linkedin_person_urn,
-      commentary: text.trim(),
-      visibility: 'PUBLIC',
-      distribution: {
-        feedDistribution: 'MAIN_FEED',
-        targetEntities: [],
-        thirdPartyDistributionChannels: [],
-      },
-      lifecycleState: 'PUBLISHED',
-      isReshareDisabledByAuthor: false,
-    }),
+    body: JSON.stringify(postBody),
   });
 
   if (!liRes.ok) {
@@ -60,7 +109,6 @@ export async function POST(request) {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
-  // LinkedIn returns 201 + X-LinkedIn-Id header with the new post ID
   const postId = liRes.headers.get('x-linkedin-id');
   return NextResponse.json({ ok: true, postId });
 }

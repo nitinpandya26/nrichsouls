@@ -2,6 +2,7 @@
 import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import JSZip from 'jszip';
 import ImageGenerator from '../../components/ImageGenerator';
 
 const PLATFORMS = [
@@ -28,7 +29,7 @@ function CopyButton({ text, label = 'Copy' }) {
   );
 }
 
-function LinkedInPostButton({ text }) {
+function LinkedInPostButton({ text, imageUrl }) {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
   async function post() {
@@ -36,7 +37,7 @@ function LinkedInPostButton({ text }) {
     try {
       const res = await fetch('/api/admin/linkedin/post', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, imageUrl: imageUrl || undefined }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Post failed');
@@ -52,7 +53,7 @@ function LinkedInPostButton({ text }) {
         style={{ backgroundColor: '#0077b5' }}>
         {status === 'posting'
           ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Posting…</>
-          : <>💼 Post to LinkedIn</>}
+          : <>{imageUrl ? '💼 Post with Image' : '💼 Post to LinkedIn'}</>}
       </button>
     </div>
   );
@@ -109,7 +110,7 @@ function TwitterView({ content }) {
   );
 }
 
-function InstagramView({ content }) {
+function InstagramCaption({ content }) {
   const [groups, setGroups] = useState([]);
   const [groupsLoaded, setGroupsLoaded] = useState(false);
   const [copiedGroup, setCopiedGroup] = useState(null);
@@ -184,7 +185,20 @@ export default function IdeaDetailPage({ params }) {
   const [savingTab, setSavingTab] = useState({});
   const [savedTab, setSavedTab] = useState({});
 
-  const [showImgGen, setShowImgGen] = useState(false);
+  // Cover image
+  const [showCoverImgGen, setShowCoverImgGen] = useState(false);
+
+  // Content image
+  const [showContentImgGen, setShowContentImgGen] = useState(false);
+  const [savingContentImg, setSavingContentImg] = useState(false);
+
+  // Carousel
+  const [carouselItems, setCarouselItems] = useState([]);
+  const [generatingPrompts, setGeneratingPrompts] = useState(false);
+  const [generatingAll, setGeneratingAll] = useState(false);
+  const [savingCarousel, setSavingCarousel] = useState(false);
+  const [carouselSaved, setCarouselSaved] = useState(false);
+  const [carouselPromptError, setCarouselPromptError] = useState('');
 
   // idle | checking | confirming | deleting | pushing | error
   const [pushState, setPushState] = useState('idle');
@@ -194,7 +208,12 @@ export default function IdeaDetailPage({ params }) {
   useEffect(() => {
     fetch(`/api/admin/ideas/${id}`)
       .then((r) => r.json())
-      .then((d) => { setIdea(d.idea); })
+      .then((d) => {
+        setIdea(d.idea);
+        if (Array.isArray(d.idea?.carousel_images) && d.idea.carousel_images.length) {
+          setCarouselItems(d.idea.carousel_images.map((url, i) => ({ prompt: `Carousel image ${i + 1}`, url, generating: false })));
+        }
+      })
       .finally(() => setLoading(false));
     fetch('/api/admin/linkedin/status')
       .then((r) => r.json())
@@ -236,14 +255,106 @@ export default function IdeaDetailPage({ params }) {
     }
   }
 
-  async function handleImageGenerated(url) {
+  async function handleCoverImageGenerated(url) {
     await fetch(`/api/admin/ideas/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cover_image: url }),
     });
     setIdea((prev) => ({ ...prev, cover_image: url }));
-    setShowImgGen(false);
+    setShowCoverImgGen(false);
+  }
+
+  async function handleContentImageGenerated(url) {
+    setSavingContentImg(true);
+    try {
+      await fetch(`/api/admin/ideas/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content_image: url }),
+      });
+      setIdea((prev) => ({ ...prev, content_image: url }));
+      setShowContentImgGen(false);
+    } finally {
+      setSavingContentImg(false);
+    }
+  }
+
+  async function generateCarouselPrompts() {
+    setGeneratingPrompts(true);
+    setCarouselPromptError('');
+    try {
+      const res = await fetch('/api/admin/generate-carousel-prompts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ blogHtml: idea.generated_blog, title: idea.title, count: 6 }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Failed to generate prompts');
+      setCarouselItems((data.prompts ?? []).map((p) => ({ prompt: p, url: '', generating: false })));
+    } catch (e) {
+      setCarouselPromptError(e.message);
+    } finally {
+      setGeneratingPrompts(false);
+    }
+  }
+
+  async function generateSingleCarousel(index) {
+    setCarouselItems((prev) => prev.map((item, i) => i === index ? { ...item, generating: true } : item));
+    try {
+      const res = await fetch('/api/admin/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: carouselItems[index].prompt, model: 'dall-e-3', size: '1024x1024', quality: 'standard' }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Generation failed');
+      setCarouselItems((prev) => prev.map((item, i) => i === index ? { ...item, url: data.url, generating: false } : item));
+    } catch (e) {
+      alert(`Image ${index + 1} failed: ${e.message}`);
+      setCarouselItems((prev) => prev.map((item, i) => i === index ? { ...item, generating: false } : item));
+    }
+  }
+
+  async function generateAllCarousel() {
+    setGeneratingAll(true);
+    for (let i = 0; i < carouselItems.length; i++) {
+      await generateSingleCarousel(i);
+    }
+    setGeneratingAll(false);
+  }
+
+  async function saveCarousel() {
+    setSavingCarousel(true);
+    try {
+      const urls = carouselItems.map((item) => item.url).filter(Boolean);
+      await fetch(`/api/admin/ideas/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ carousel_images: urls }),
+      });
+      setIdea((prev) => ({ ...prev, carousel_images: urls }));
+      setCarouselSaved(true);
+      setTimeout(() => setCarouselSaved(false), 2500);
+    } finally {
+      setSavingCarousel(false);
+    }
+  }
+
+  async function downloadCarouselZip() {
+    const zip = new JSZip();
+    const folder = zip.folder('carousel');
+    const generated = carouselItems.filter((item) => item.url);
+    for (let i = 0; i < generated.length; i++) {
+      const res = await fetch(generated[i].url);
+      const blob = await res.blob();
+      folder.file(`carousel-${i + 1}.png`, blob);
+    }
+    const content = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(content);
+    a.download = `carousel-${id}.zip`;
+    a.click();
   }
 
   async function handlePushToDraft() {
@@ -252,7 +363,6 @@ export default function IdeaDetailPage({ params }) {
       try {
         const res = await fetch(`/api/admin/posts/${idea.post_id}`);
         if (!res.ok) {
-          // Post was deleted but idea still references it — clear stale link and push fresh
           await fetch(`/api/admin/ideas/${id}`, {
             method: 'PATCH', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ post_id: null }),
@@ -304,6 +414,7 @@ export default function IdeaDetailPage({ params }) {
   }
 
   const isWorking = ['checking', 'deleting', 'pushing'].includes(pushState);
+  const generatedCarouselCount = carouselItems.filter((i) => i.url).length;
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh] text-slate-400">
@@ -399,15 +510,15 @@ export default function IdeaDetailPage({ params }) {
           <img src={idea.cover_image} alt="Cover" className="w-full h-56 object-cover" />
           <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100">
             <p className="text-xs font-medium text-slate-500">Cover Image</p>
-            <button onClick={() => setShowImgGen((v) => !v)} className="text-xs text-indigo-500 hover:text-indigo-700 font-medium">
-              {showImgGen ? 'Hide' : '↺ Regenerate'}
+            <button onClick={() => setShowCoverImgGen((v) => !v)} className="text-xs text-indigo-500 hover:text-indigo-700 font-medium">
+              {showCoverImgGen ? 'Hide' : '↺ Regenerate'}
             </button>
           </div>
-          {showImgGen && (
+          {showCoverImgGen && (
             <div className="px-5 pb-5 pt-2">
               <ImageGenerator
                 initialPrompt={`Professional blog cover image, modern minimalist design, absolutely no text: ${idea.title || idea.raw_idea}`}
-                onGenerated={handleImageGenerated}
+                onGenerated={handleCoverImageGenerated}
                 regenerate
               />
             </div>
@@ -420,24 +531,75 @@ export default function IdeaDetailPage({ params }) {
               <p className="text-sm font-semibold text-slate-600">No cover image</p>
               <p className="text-xs text-slate-400 mt-0.5">Generate one with any OpenAI image model</p>
             </div>
-            <button onClick={() => setShowImgGen((v) => !v)}
+            <button onClick={() => setShowCoverImgGen((v) => !v)}
               className="text-xs font-semibold text-white bg-slate-800 hover:bg-slate-900 px-4 py-2 rounded-xl transition-colors">
-              {showImgGen ? 'Hide' : '🎨 Generate Image'}
+              {showCoverImgGen ? 'Hide' : '🎨 Generate Cover'}
             </button>
           </div>
-          {showImgGen && (
+          {showCoverImgGen && (
             <div className="mt-4 pt-4 border-t border-slate-100">
               <ImageGenerator
                 initialPrompt={`Professional blog cover image, modern minimalist design, absolutely no text: ${idea.title || idea.raw_idea}`}
-                onGenerated={handleImageGenerated}
+                onGenerated={handleCoverImageGenerated}
               />
             </div>
           )}
         </div>
       )}
 
+      {/* Content image (inline / lead image) */}
+      {idea.content_image ? (
+        <div className="mb-4 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <img src={idea.content_image} alt="Content" className="w-full h-48 object-cover" />
+          <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100">
+            <div>
+              <p className="text-xs font-medium text-slate-500">Content Image</p>
+              <p className="text-xs text-slate-400">Inserted after intro paragraph · used as lead image on LinkedIn & X</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <CopyButton text={idea.content_image} label="Copy URL" />
+              <button onClick={() => setShowContentImgGen((v) => !v)} className="text-xs text-indigo-500 hover:text-indigo-700 font-medium">
+                {showContentImgGen ? 'Hide' : '↺ Regenerate'}
+              </button>
+            </div>
+          </div>
+          {showContentImgGen && (
+            <div className="px-5 pb-5 pt-2">
+              <ImageGenerator
+                initialPrompt={`High-quality editorial illustration for blog article: ${idea.title || idea.raw_idea}. Photorealistic, wide format, no text overlays.`}
+                onGenerated={handleContentImageGenerated}
+                regenerate
+              />
+              {savingContentImg && <p className="text-xs text-slate-400 mt-2">Saving…</p>}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mb-4 bg-white rounded-2xl border border-dashed border-blue-200 p-5">
+          <div className="flex items-center justify-between mb-0">
+            <div>
+              <p className="text-sm font-semibold text-slate-600">No content image</p>
+              <p className="text-xs text-slate-400 mt-0.5">Inserted after intro paragraph · used as lead image on LinkedIn & X</p>
+            </div>
+            <button onClick={() => setShowContentImgGen((v) => !v)}
+              className="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl transition-colors">
+              {showContentImgGen ? 'Hide' : '🖼️ Generate Content Image'}
+            </button>
+          </div>
+          {showContentImgGen && (
+            <div className="mt-4 pt-4 border-t border-slate-100">
+              <ImageGenerator
+                initialPrompt={`High-quality editorial illustration for blog article: ${idea.title || idea.raw_idea}. Photorealistic, wide format, no text overlays.`}
+                onGenerated={handleContentImageGenerated}
+              />
+              {savingContentImg && <p className="text-xs text-slate-400 mt-2">Saving…</p>}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Platform tabs */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-4">
         <div className="flex border-b border-slate-100 overflow-x-auto">
           {PLATFORMS.map((p) => (
             <button key={p.key} onClick={() => setActiveTab(p.key)}
@@ -452,6 +614,18 @@ export default function IdeaDetailPage({ params }) {
         </div>
 
         <div className="p-5">
+          {/* Lead image strip for LinkedIn & Twitter */}
+          {(activeTab === 'generated_linkedin' || activeTab === 'generated_twitter') && idea.content_image && (
+            <div className="mb-4 flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
+              <img src={idea.content_image} alt="" className="w-16 h-16 object-cover rounded-lg shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-blue-800">Lead Image</p>
+                <p className="text-xs text-blue-600 truncate">{idea.content_image}</p>
+              </div>
+              <CopyButton text={idea.content_image} label="Copy URL" />
+            </div>
+          )}
+
           <div className="flex items-center justify-between mb-4">
             <p className="text-xs text-slate-400">
               {activeTab === 'generated_blog'      && 'HTML article — will render on the blog as-is'}
@@ -462,7 +636,7 @@ export default function IdeaDetailPage({ params }) {
             <div className="flex items-center gap-2">
               {activeTab === 'generated_linkedin' && !editMode[activeTab] && activeContent && (
                 liConnected
-                  ? <LinkedInPostButton text={activeContent} />
+                  ? <LinkedInPostButton text={activeContent} imageUrl={idea.content_image || ''} />
                   : <Link href="/admin/settings" className="text-xs text-slate-400 hover:text-indigo-600">Connect LinkedIn →</Link>
               )}
               {!editMode[activeTab] && (activeTab === 'generated_blog' || activeTab === 'generated_linkedin') && (
@@ -504,7 +678,7 @@ export default function IdeaDetailPage({ params }) {
                   : <p className="text-center py-12 text-slate-400 text-sm">No blog content. Go back to generate.</p>
               )}
               {activeTab === 'generated_twitter'   && <TwitterView   content={activeContent} />}
-              {activeTab === 'generated_instagram' && <InstagramView content={activeContent} />}
+              {activeTab === 'generated_instagram' && <InstagramCaption content={activeContent} />}
               {activeTab === 'generated_linkedin' && (
                 activeContent
                   ? <pre className="whitespace-pre-wrap text-sm text-slate-700 bg-slate-50 rounded-xl p-5 max-h-[500px] overflow-y-auto font-sans leading-relaxed">{activeContent}</pre>
@@ -513,6 +687,85 @@ export default function IdeaDetailPage({ params }) {
             </>
           )}
         </div>
+      </div>
+
+      {/* Instagram Carousel */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div>
+            <h2 className="text-sm font-bold text-slate-800">Instagram Carousel Images</h2>
+            <p className="text-xs text-slate-400 mt-0.5">5–7 images for an Instagram carousel post</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {carouselItems.length > 0 && generatedCarouselCount > 0 && (
+              <>
+                <button onClick={downloadCarouselZip}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">
+                  ↓ Download ZIP ({generatedCarouselCount})
+                </button>
+                <button onClick={saveCarousel} disabled={savingCarousel}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors ${carouselSaved ? 'bg-emerald-50 text-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} disabled:opacity-50`}>
+                  {savingCarousel ? 'Saving…' : carouselSaved ? '✓ Saved' : 'Save Carousel'}
+                </button>
+              </>
+            )}
+            {carouselItems.length > 0 && (
+              <button onClick={generateAllCarousel} disabled={generatingAll || generatingPrompts}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white flex items-center gap-1.5">
+                {generatingAll
+                  ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating…</>
+                  : '🎨 Generate All'}
+              </button>
+            )}
+            <button onClick={generateCarouselPrompts} disabled={generatingPrompts || !idea.generated_blog}
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white flex items-center gap-1.5">
+              {generatingPrompts
+                ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating prompts…</>
+                : carouselItems.length > 0 ? '↺ Regenerate Prompts' : '✨ Generate Prompts'}
+            </button>
+          </div>
+        </div>
+
+        {carouselPromptError && (
+          <div className="mx-5 mt-4 text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{carouselPromptError}</div>
+        )}
+
+        {carouselItems.length === 0 ? (
+          <div className="px-5 py-10 text-center">
+            <p className="text-slate-400 text-sm">Click "Generate Prompts" to auto-suggest carousel image prompts from the blog content.</p>
+            {!idea.generated_blog && <p className="text-xs text-amber-500 mt-2">You need blog content first.</p>}
+          </div>
+        ) : (
+          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {carouselItems.map((item, i) => (
+              <div key={i} className="border border-slate-200 rounded-xl overflow-hidden">
+                {item.url ? (
+                  <img src={item.url} alt={`Carousel ${i + 1}`} className="w-full h-40 object-cover" />
+                ) : (
+                  <div className="w-full h-40 bg-slate-100 flex items-center justify-center">
+                    {item.generating
+                      ? <div className="w-6 h-6 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+                      : <span className="text-slate-300 text-2xl">{i + 1}</span>}
+                  </div>
+                )}
+                <div className="p-3 space-y-2">
+                  <textarea
+                    value={item.prompt}
+                    onChange={(e) => setCarouselItems((prev) => prev.map((x, j) => j === i ? { ...x, prompt: e.target.value } : x))}
+                    rows={3}
+                    className="w-full text-xs text-slate-700 border border-slate-200 rounded-lg px-2.5 py-2 focus:outline-none focus:border-indigo-400 resize-none"
+                  />
+                  <button
+                    onClick={() => generateSingleCarousel(i)}
+                    disabled={item.generating || generatingAll}
+                    className="w-full text-xs font-semibold py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white transition-colors">
+                    {item.generating ? 'Generating…' : item.url ? '↺ Regenerate' : '🎨 Generate'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

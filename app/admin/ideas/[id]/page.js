@@ -2,6 +2,7 @@
 import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ImageGenerator from '../../components/ImageGenerator';
 
 const PLATFORMS = [
   { key: 'generated_blog',      label: 'Blog Post',   icon: '📝' },
@@ -183,10 +184,7 @@ export default function IdeaDetailPage({ params }) {
   const [savingTab, setSavingTab] = useState({});
   const [savedTab, setSavedTab] = useState({});
 
-  const [imgPrompt, setImgPrompt] = useState('');
   const [showImgGen, setShowImgGen] = useState(false);
-  const [generatingImage, setGeneratingImage] = useState(false);
-  const [imgError, setImgError] = useState('');
 
   // idle | checking | confirming | deleting | pushing | error
   const [pushState, setPushState] = useState('idle');
@@ -196,12 +194,7 @@ export default function IdeaDetailPage({ params }) {
   useEffect(() => {
     fetch(`/api/admin/ideas/${id}`)
       .then((r) => r.json())
-      .then((d) => {
-        setIdea(d.idea);
-        if (d.idea?.title) {
-          setImgPrompt(`Professional blog cover image, modern minimalist design, absolutely no text: ${d.idea.title}`);
-        }
-      })
+      .then((d) => { setIdea(d.idea); })
       .finally(() => setLoading(false));
     fetch('/api/admin/linkedin/status')
       .then((r) => r.json())
@@ -243,29 +236,14 @@ export default function IdeaDetailPage({ params }) {
     }
   }
 
-  async function generateCoverImage() {
-    setGeneratingImage(true);
-    setImgError('');
-    try {
-      const res = await fetch('/api/admin/generate-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: imgPrompt, size: '1792x1024' }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Image generation failed');
-      await fetch(`/api/admin/ideas/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cover_image: data.url }),
-      });
-      setIdea((prev) => ({ ...prev, cover_image: data.url }));
-      setShowImgGen(false);
-    } catch (e) {
-      setImgError(e.message);
-    } finally {
-      setGeneratingImage(false);
-    }
+  async function handleImageGenerated(url) {
+    await fetch(`/api/admin/ideas/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cover_image: url }),
+    });
+    setIdea((prev) => ({ ...prev, cover_image: url }));
+    setShowImgGen(false);
   }
 
   async function handlePushToDraft() {
@@ -420,30 +398,27 @@ export default function IdeaDetailPage({ params }) {
         <div className="mb-4 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <img src={idea.cover_image} alt="Cover" className="w-full h-56 object-cover" />
           <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100">
-            <p className="text-xs font-medium text-slate-500">Cover Image (DALL-E)</p>
+            <p className="text-xs font-medium text-slate-500">Cover Image</p>
             <button onClick={() => setShowImgGen((v) => !v)} className="text-xs text-indigo-500 hover:text-indigo-700 font-medium">
               {showImgGen ? 'Hide' : '↺ Regenerate'}
             </button>
           </div>
           {showImgGen && (
-            <div className="px-5 pb-5 space-y-3">
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide">DALL-E 3 Prompt</label>
-              <textarea value={imgPrompt} onChange={(e) => setImgPrompt(e.target.value)} rows={3}
-                className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 resize-none" />
-              {imgError && <p className="text-xs text-red-500">{imgError}</p>}
-              <button onClick={generateCoverImage} disabled={generatingImage || !imgPrompt.trim()}
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-                {generatingImage ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating…</> : '↺ Regenerate Image'}
-              </button>
+            <div className="px-5 pb-5 pt-2">
+              <ImageGenerator
+                initialPrompt={`Professional blog cover image, modern minimalist design, absolutely no text: ${idea.title || idea.raw_idea}`}
+                onGenerated={handleImageGenerated}
+                regenerate
+              />
             </div>
           )}
         </div>
       ) : (
         <div className="mb-4 bg-white rounded-2xl border border-dashed border-slate-200 p-5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-0">
             <div>
               <p className="text-sm font-semibold text-slate-600">No cover image</p>
-              <p className="text-xs text-slate-400 mt-0.5">Generate one with DALL-E 3 (uses OpenAI)</p>
+              <p className="text-xs text-slate-400 mt-0.5">Generate one with any OpenAI image model</p>
             </div>
             <button onClick={() => setShowImgGen((v) => !v)}
               className="text-xs font-semibold text-white bg-slate-800 hover:bg-slate-900 px-4 py-2 rounded-xl transition-colors">
@@ -451,17 +426,11 @@ export default function IdeaDetailPage({ params }) {
             </button>
           </div>
           {showImgGen && (
-            <div className="mt-4 pt-4 border-t border-slate-100 space-y-3">
-              <textarea value={imgPrompt} onChange={(e) => setImgPrompt(e.target.value)} rows={3}
-                placeholder="Describe the cover image…"
-                className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 resize-none" />
-              {imgError && <p className="text-xs text-red-500">{imgError}</p>}
-              <button onClick={generateCoverImage} disabled={generatingImage || !imgPrompt.trim()}
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-                {generatingImage
-                  ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating (~10s)…</>
-                  : '🎨 Generate with DALL-E 3'}
-              </button>
+            <div className="mt-4 pt-4 border-t border-slate-100">
+              <ImageGenerator
+                initialPrompt={`Professional blog cover image, modern minimalist design, absolutely no text: ${idea.title || idea.raw_idea}`}
+                onGenerated={handleImageGenerated}
+              />
             </div>
           )}
         </div>

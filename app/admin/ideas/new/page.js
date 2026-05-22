@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ImageGenerator from '../../components/ImageGenerator';
 
 const CATEGORIES = [
   { value: 'ai-tech-automation',        label: '🤖 AI, Tech & Automation' },
@@ -209,18 +210,13 @@ export default function NewIdeaPage() {
   const [editedContent, setEditedContent] = useState({});
 
   const [showImgSection, setShowImgSection] = useState(false);
-  const [imgPrompt, setImgPrompt] = useState('');
-  const [generatingImage, setGeneratingImage] = useState(false);
   const [coverImageUrl, setCoverImageUrl] = useState('');
-  const [imgError, setImgError] = useState('');
 
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (result?.title) {
-      setImgPrompt(`Professional blog cover image, modern minimalist design, absolutely no text: ${result.title}`);
-    }
-  }, [result?.title]);
+  const imgInitialPrompt = result?.title
+    ? `Professional blog cover image, modern minimalist design, absolutely no text: ${result.title}`
+    : '';
 
   function togglePromptEditor() {
     if (!showPrompt) {
@@ -267,25 +263,6 @@ export default function NewIdeaPage() {
     } catch (err) {
       setErrorMsg(err.message);
       setStatus('error');
-    }
-  }
-
-  async function generateCoverImage() {
-    setGeneratingImage(true);
-    setImgError('');
-    try {
-      const res = await fetch('/api/admin/generate-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: imgPrompt, size: '1792x1024' }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Image generation failed');
-      setCoverImageUrl(data.url);
-    } catch (e) {
-      setImgError(e.message);
-    } finally {
-      setGeneratingImage(false);
     }
   }
 
@@ -495,7 +472,7 @@ export default function NewIdeaPage() {
               className="w-full flex items-center justify-between px-5 py-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
               <span className="flex items-center gap-2">
                 <span>🖼️</span>
-                {coverImageUrl ? 'Cover Image — Generated ✓' : 'Generate Cover Image  (DALL-E 3, optional)'}
+                {coverImageUrl ? 'Cover Image — Generated ✓' : 'Generate Cover Image (optional)'}
               </span>
               <span className="text-slate-400 text-xs">{showImgSection ? '▲ Hide' : '▼ Show'}</span>
             </button>
@@ -505,26 +482,15 @@ export default function NewIdeaPage() {
                   <div className="rounded-xl overflow-hidden border border-slate-200">
                     <img src={coverImageUrl} alt="Cover" className="w-full h-48 object-cover" />
                     <p className="text-xs text-emerald-700 font-medium bg-emerald-50 px-4 py-2 border-t border-slate-200">
-                      ✓ Image saved to Supabase Storage — will be included when you Save to Ideas
+                      ✓ Saved to Supabase Storage — included when you Save to Ideas
                     </p>
                   </div>
                 )}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">DALL-E 3 Prompt</label>
-                  <textarea value={imgPrompt} onChange={(e) => setImgPrompt(e.target.value)} rows={3}
-                    placeholder="Describe the cover image…"
-                    className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 resize-none" />
-                </div>
-                {imgError && <p className="text-xs text-red-500">{imgError}</p>}
-                <div className="flex items-center gap-4">
-                  <button type="button" onClick={generateCoverImage} disabled={generatingImage || !imgPrompt.trim()}
-                    className="flex items-center gap-2 bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
-                    {generatingImage
-                      ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating (~10s)…</>
-                      : coverImageUrl ? '↺ Regenerate Image' : '🎨 Generate with DALL-E 3'}
-                  </button>
-                  <p className="text-xs text-slate-400">1792×1024 px · uploaded to Supabase Storage</p>
-                </div>
+                <ImageGenerator
+                  initialPrompt={imgInitialPrompt}
+                  onGenerated={(url) => setCoverImageUrl(url)}
+                  regenerate={!!coverImageUrl}
+                />
               </div>
             )}
           </div>

@@ -95,12 +95,17 @@ export default function IdeasPage() {
                 return (
                   <tr key={idea.id} className="hover:bg-slate-50 transition-colors group">
                     <td className="px-6 py-4 max-w-xs">
-                      <p className="font-medium text-slate-800 line-clamp-1">
-                        {idea.title || idea.raw_idea}
-                      </p>
-                      {idea.title && (
-                        <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{idea.raw_idea}</p>
-                      )}
+                      <div className="flex items-center gap-3">
+                        {idea.cover_image ? (
+                          <img src={idea.cover_image} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0 border border-slate-200" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 shrink-0 flex items-center justify-center text-slate-400 text-xs">💡</div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-800 line-clamp-1">{idea.title || idea.raw_idea}</p>
+                          {idea.title && <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">{idea.raw_idea}</p>}
+                        </div>
+                      </div>
                     </td>
                     <td className="px-4 py-4 hidden md:table-cell">
                       <span

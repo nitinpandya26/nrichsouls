@@ -114,10 +114,10 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { idea, category = 'ai-tech-automation', tone = 'professional', provider = 'openai' } =
+  const { idea, category = 'ai-tech-automation', tone = 'professional', provider = 'openai', customPrompt } =
     await request.json().catch(() => ({}));
 
-  if (!idea?.trim()) {
+  if (!idea?.trim() && !customPrompt?.trim()) {
     return NextResponse.json({ error: 'idea is required' }, { status: 400 });
   }
 
@@ -133,7 +133,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'ANTHROPIC_API_KEY is not configured in .env.local' }, { status: 503 });
   }
 
-  const prompt = buildPrompt(idea.trim(), category, tone);
+  const prompt = customPrompt?.trim() || buildPrompt(idea.trim(), category, tone);
 
   let raw;
   try {

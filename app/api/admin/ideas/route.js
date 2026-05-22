@@ -16,7 +16,7 @@ export async function GET() {
 
   const { data, error } = await supabaseAdmin
     .from('ideas')
-    .select('id,title,raw_idea,category,tone,ai_provider,status,post_id,created_at')
+    .select('id,title,raw_idea,category,tone,ai_provider,status,post_id,cover_image,created_at')
     .order('created_at', { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -46,6 +46,7 @@ export async function POST(request) {
       generated_linkedin: body.generated_linkedin ?? null,
       generated_twitter:  body.generated_twitter ?? null,
       generated_instagram:body.generated_instagram ?? null,
+      cover_image:        body.cover_image ?? '',
       status:             'draft',
     })
     .select()

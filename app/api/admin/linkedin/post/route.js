@@ -14,7 +14,7 @@ async function uploadImageToLinkedIn(token, personUrn, imageUrl) {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
-      'LinkedIn-Version': '202304',
+      'LinkedIn-Version': '202501',
       'X-Restli-Protocol-Version': '2.0.0',
     },
     body: JSON.stringify({ initializeUploadRequest: { owner: personUrn } }),
@@ -97,7 +97,7 @@ export async function POST(request) {
     headers: {
       Authorization: `Bearer ${s.linkedin_access_token}`,
       'Content-Type': 'application/json',
-      'LinkedIn-Version': '202304',
+      'LinkedIn-Version': '202501',
       'X-Restli-Protocol-Version': '2.0.0',
     },
     body: JSON.stringify(postBody),

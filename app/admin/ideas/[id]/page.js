@@ -214,9 +214,21 @@ function BlogPreview({ idea }) {
   );
 }
 
+function stripHtml(html) {
+  return (html ?? '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/li>/gi, '\n')
+    .replace(/<li[^>]*>/gi, '• ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&#39;/g, "'").replace(/&quot;/g, '"')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function LinkedInPreview({ idea }) {
   const [expanded, setExpanded] = useState(false);
-  const text = idea.generated_linkedin ?? '';
+  const text = stripHtml(idea.generated_linkedin);
   const LIMIT = 280;
   const truncated = !expanded && text.length > LIMIT;
   const display = truncated ? text.slice(0, LIMIT) : text;
@@ -265,7 +277,7 @@ function LinkedInPreview({ idea }) {
 }
 
 function XPreview({ idea }) {
-  const tweets = (idea.generated_twitter ?? '').split('---').map(t => t.trim()).filter(Boolean);
+  const tweets = stripHtml(idea.generated_twitter).split('---').map(t => t.trim()).filter(Boolean);
 
   return (
     <div style={{ background: '#000', borderRadius: 12, padding: '8px 0', maxWidth: 520, margin: '0 auto', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
@@ -309,7 +321,7 @@ function InstagramPreview({ idea, carouselItems }) {
   const displayImages = images.length > 0 ? images : idea.content_image ? [idea.content_image] : [];
   const hasMultiple = displayImages.length > 1;
   const displayImage = displayImages[activeIdx] ?? null;
-  const caption = idea.generated_instagram ?? '';
+  const caption = stripHtml(idea.generated_instagram);
   const captionPreview = caption.slice(0, 120);
 
   return (

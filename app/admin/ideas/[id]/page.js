@@ -452,8 +452,15 @@ export default function IdeaDetailPage({ params }) {
     return editedContent[key] ?? idea?.[key] ?? '';
   }
 
+  function getDisplayContent(key) {
+    const raw = getContent(key);
+    return key === 'generated_blog' ? raw : stripHtml(raw);
+  }
+
   function startEdit(key) {
-    setEditedContent((prev) => ({ ...prev, [key]: idea?.[key] ?? '' }));
+    const raw = idea?.[key] ?? '';
+    const value = key === 'generated_blog' ? raw : stripHtml(raw);
+    setEditedContent((prev) => ({ ...prev, [key]: value }));
     setEditMode((prev) => ({ ...prev, [key]: true }));
   }
 
@@ -663,6 +670,7 @@ export default function IdeaDetailPage({ params }) {
   );
 
   const activeContent = getContent(activeTab);
+  const activeDisplayContent = getDisplayContent(activeTab);
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
@@ -862,13 +870,13 @@ export default function IdeaDetailPage({ params }) {
                 </p>
             }
             <div className="flex items-center gap-2">
-              {!editMode[activeTab] && !showPreview && activeTab === 'generated_linkedin' && activeContent && (
+              {!editMode[activeTab] && !showPreview && activeTab === 'generated_linkedin' && activeDisplayContent && (
                 liConnected
-                  ? <LinkedInPostButton text={activeContent} imageUrl={idea.content_image || ''} />
+                  ? <LinkedInPostButton text={activeDisplayContent} imageUrl={idea.content_image || ''} />
                   : <Link href="/admin/settings" className="text-xs text-slate-400 hover:text-indigo-600">Connect LinkedIn →</Link>
               )}
               {!editMode[activeTab] && !showPreview && (activeTab === 'generated_blog' || activeTab === 'generated_linkedin') && (
-                <CopyButton text={activeContent} />
+                <CopyButton text={activeDisplayContent} />
               )}
               {editMode[activeTab] ? (
                 <div className="flex gap-2">
@@ -932,16 +940,16 @@ export default function IdeaDetailPage({ params }) {
                 </div>
               )}
               {activeTab === 'generated_blog' && (
-                activeContent
+                activeDisplayContent
                   ? <div className="article-content prose prose-slate max-w-none text-sm leading-relaxed bg-slate-50 rounded-xl p-5 max-h-[600px] overflow-y-auto"
-                      dangerouslySetInnerHTML={{ __html: activeContent }} />
+                      dangerouslySetInnerHTML={{ __html: activeDisplayContent }} />
                   : <p className="text-center py-12 text-slate-400 text-sm">No blog content. Go back to generate.</p>
               )}
-              {activeTab === 'generated_twitter'   && <TwitterView     content={activeContent} />}
-              {activeTab === 'generated_instagram' && <InstagramCaption content={activeContent} />}
+              {activeTab === 'generated_twitter'   && <TwitterView     content={activeDisplayContent} />}
+              {activeTab === 'generated_instagram' && <InstagramCaption content={activeDisplayContent} />}
               {activeTab === 'generated_linkedin' && (
-                activeContent
-                  ? <pre className="whitespace-pre-wrap text-sm text-slate-700 bg-slate-50 rounded-xl p-5 max-h-[500px] overflow-y-auto font-sans leading-relaxed">{activeContent}</pre>
+                activeDisplayContent
+                  ? <pre className="whitespace-pre-wrap text-sm text-slate-700 bg-slate-50 rounded-xl p-5 max-h-[500px] overflow-y-auto font-sans leading-relaxed">{activeDisplayContent}</pre>
                   : <p className="text-center py-12 text-slate-400 text-sm">No LinkedIn content yet.</p>
               )}
             </>

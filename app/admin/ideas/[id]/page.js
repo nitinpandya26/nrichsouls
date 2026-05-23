@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState, use, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import JSZip from 'jszip';
@@ -200,6 +200,7 @@ export default function IdeaDetailPage({ params }) {
   const [carouselSaved, setCarouselSaved] = useState(false);
   const [carouselPromptError, setCarouselPromptError] = useState('');
   const [carouselPromptModel, setCarouselPromptModel] = useState('anthropic:claude-sonnet-4-6');
+  const stopCarouselRef = useRef(false);
   const [carouselImgModel, setCarouselImgModel] = useState('dall-e-3');
   const [carouselImgSize, setCarouselImgSize] = useState('1024x1024');
   const [carouselImgQuality, setCarouselImgQuality] = useState('standard');
@@ -321,11 +322,18 @@ export default function IdeaDetailPage({ params }) {
   }
 
   async function generateAllCarousel() {
+    stopCarouselRef.current = false;
     setGeneratingAll(true);
     for (let i = 0; i < carouselItems.length; i++) {
+      if (stopCarouselRef.current) break;
       await generateSingleCarousel(i);
     }
+    stopCarouselRef.current = false;
     setGeneratingAll(false);
+  }
+
+  function stopCarousel() {
+    stopCarouselRef.current = true;
   }
 
   async function saveCarousel() {
@@ -715,12 +723,16 @@ export default function IdeaDetailPage({ params }) {
                 </>
               )}
               {carouselItems.length > 0 && (
-                <button onClick={generateAllCarousel} disabled={generatingAll || generatingPrompts}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white flex items-center gap-1.5">
-                  {generatingAll
-                    ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Generating…</>
-                    : '🎨 Generate All'}
-                </button>
+                generatingAll
+                  ? <button onClick={stopCarousel}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center gap-1.5">
+                      <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Stop
+                    </button>
+                  : <button onClick={generateAllCarousel} disabled={generatingPrompts}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white">
+                      🎨 Generate All
+                    </button>
               )}
               <button onClick={generateCarouselPrompts} disabled={generatingPrompts || !idea.generated_blog}
                 className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white flex items-center gap-1.5">

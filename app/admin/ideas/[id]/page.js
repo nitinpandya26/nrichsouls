@@ -169,6 +169,207 @@ function InstagramCaption({ content }) {
   );
 }
 
+// ── Platform preview components ──────────────────────────────────────────────
+
+const ACCENT = {
+  'ai-tech-automation':     '#8b5cf6',
+  'career-growth-remote-work': '#f59e0b',
+  'health-wellness':        '#10b981',
+};
+
+function BlogPreview({ idea }) {
+  const accent = ACCENT[idea.category] ?? '#6366f1';
+  const html = (() => {
+    let h = idea.generated_blog ?? '';
+    if (idea.content_image) {
+      const idx = h.indexOf('</p>');
+      if (idx !== -1) {
+        const fig = `<figure data-content-image="true" style="margin:24px 0;"><img src="${idea.content_image}" alt="" style="max-width:100%;border-radius:12px;display:block;" /></figure>`;
+        h = h.slice(0, idx + 4) + fig + h.slice(idx + 4);
+      }
+    }
+    return h;
+  })();
+
+  return (
+    <div style={{ maxWidth: 672, margin: '0 auto', padding: '24px 0', fontFamily: 'var(--font-geist-sans, system-ui, sans-serif)' }}>
+      <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: accent, background: `${accent}18`, padding: '3px 10px', borderRadius: 20 }}>
+        {idea.category?.replace(/-/g, ' ')}
+      </span>
+      <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1e293b', lineHeight: 1.25, margin: '16px 0 12px' }}>
+        {idea.title || idea.raw_idea}
+      </h1>
+      <div style={{ display: 'flex', gap: 12, fontSize: 13, color: '#64748b', paddingBottom: 20, borderBottom: '1px solid #e2e8f0', marginBottom: 24 }}>
+        <span>{new Date().toISOString().split('T')[0]}</span>
+      </div>
+      {idea.cover_image && (
+        <div style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 32, height: 280, position: 'relative' }}>
+          <img src={idea.cover_image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </div>
+      )}
+      {html
+        ? <article className="article-content" dangerouslySetInnerHTML={{ __html: html }} />
+        : <p style={{ color: '#94a3b8', textAlign: 'center', padding: '48px 0' }}>No blog content yet.</p>}
+    </div>
+  );
+}
+
+function LinkedInPreview({ idea }) {
+  const [expanded, setExpanded] = useState(false);
+  const text = idea.generated_linkedin ?? '';
+  const LIMIT = 280;
+  const truncated = !expanded && text.length > LIMIT;
+  const display = truncated ? text.slice(0, LIMIT) : text;
+
+  return (
+    <div style={{ maxWidth: 560, margin: '0 auto', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+      <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+        {/* Header */}
+        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 18, flexShrink: 0 }}>NP</div>
+          <div style={{ flex: 1 }}>
+            <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#000' }}>Nitin Pandya</p>
+            <p style={{ margin: 0, fontSize: 12, color: '#666' }}>Founder · NrichSouls</p>
+            <p style={{ margin: 0, fontSize: 11, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>Just now · <span style={{ fontSize: 13 }}>🌐</span></p>
+          </div>
+          <div style={{ width: 24, height: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, cursor: 'pointer' }}>
+            {[0,1,2].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: '#666' }} />)}
+          </div>
+        </div>
+        {/* Text */}
+        {text && (
+          <div style={{ padding: '0 16px 12px', fontSize: 14, lineHeight: 1.65, color: '#000e' }}>
+            <pre style={{ margin: 0, fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{display}</pre>
+            {truncated && <button onClick={() => setExpanded(true)} style={{ background: 'none', border: 'none', color: '#0077b5', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: 0 }}>…more</button>}
+            {expanded && text.length > LIMIT && <button onClick={() => setExpanded(false)} style={{ background: 'none', border: 'none', color: '#0077b5', fontWeight: 600, fontSize: 14, cursor: 'pointer', padding: 0 }}>Show less</button>}
+          </div>
+        )}
+        {/* Content image */}
+        {idea.content_image && (
+          <img src={idea.content_image} alt="" style={{ width: '100%', display: 'block' }} />
+        )}
+        {/* Reactions bar */}
+        <div style={{ padding: '8px 16px', borderTop: '1px solid #e0e0e0' }}>
+          <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid #e0e0e0', paddingBottom: 8, marginBottom: 8, fontSize: 12, color: '#666' }}>
+            <span>👍 ❤️ 💡 &nbsp;Be the first to react</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            {['👍 Like', '💬 Comment', '🔁 Repost', '📤 Send'].map(a => (
+              <button key={a} style={{ background: 'none', border: 'none', color: '#666', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', borderRadius: 4 }}>{a}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function XPreview({ idea }) {
+  const tweets = (idea.generated_twitter ?? '').split('---').map(t => t.trim()).filter(Boolean);
+
+  return (
+    <div style={{ background: '#000', borderRadius: 12, padding: '8px 0', maxWidth: 520, margin: '0 auto', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+      {tweets.length === 0
+        ? <p style={{ color: '#71767b', textAlign: 'center', padding: '32px 16px', margin: 0 }}>No tweets yet.</p>
+        : tweets.map((tweet, i) => (
+          <div key={i} style={{ display: 'flex', gap: 12, padding: '12px 16px', borderBottom: i < tweets.length - 1 ? '1px solid #2f3336' : 'none' }}>
+            {/* Avatar + connector */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#1d9bf0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 16 }}>N</div>
+              {i < tweets.length - 1 && <div style={{ width: 2, flex: 1, background: '#2f3336', margin: '4px 0', minHeight: 16 }} />}
+            </div>
+            {/* Content */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
+                <span style={{ color: '#e7e9ea', fontWeight: 700, fontSize: 15 }}>Nitin Pandya</span>
+                <span style={{ color: '#71767b', fontSize: 15 }}>@nrichsouls</span>
+                <span style={{ color: '#71767b', fontSize: 15 }}>·</span>
+                <span style={{ color: '#71767b', fontSize: 14 }}>Just now</span>
+              </div>
+              <p style={{ color: '#e7e9ea', fontSize: 15, lineHeight: 1.6, margin: '0 0 12px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{tweet}</p>
+              {tweet.length > 280 && (
+                <p style={{ color: '#f4212e', fontSize: 12, margin: '0 0 8px', fontWeight: 600 }}>⚠ {tweet.length}/280 chars</p>
+              )}
+              {/* Engagement */}
+              <div style={{ display: 'flex', gap: 20, color: '#71767b', fontSize: 13 }}>
+                {[['💬', ''], ['🔁', ''], ['❤️', ''], ['📊', ''], ['↗', '']].map(([icon, count]) => (
+                  <span key={icon} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>{icon}<span>{count}</span></span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+}
+
+function InstagramPreview({ idea, carouselItems }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const images = carouselItems.filter(item => item.url).map(item => item.url);
+  const displayImages = images.length > 0 ? images : idea.content_image ? [idea.content_image] : [];
+  const hasMultiple = displayImages.length > 1;
+  const displayImage = displayImages[activeIdx] ?? null;
+  const caption = idea.generated_instagram ?? '';
+  const captionPreview = caption.slice(0, 120);
+
+  return (
+    <div style={{ maxWidth: 468, margin: '0 auto', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+      <div style={{ background: '#fff', border: '1px solid #dbdbdb', borderRadius: 3 }}>
+        {/* Header */}
+        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>N</div>
+          <div style={{ flex: 1 }}>
+            <span style={{ fontWeight: 600, fontSize: 14, color: '#262626' }}>nrichsouls</span>
+          </div>
+          {hasMultiple && (
+            <span style={{ fontSize: 12, color: '#8e8e8e' }}>{activeIdx + 1}/{displayImages.length}</span>
+          )}
+          <span style={{ fontSize: 20, color: '#262626', cursor: 'pointer', lineHeight: 1 }}>···</span>
+        </div>
+        {/* Image area */}
+        <div style={{ position: 'relative', background: '#efefef' }}>
+          {displayImage
+            ? <img src={displayImage} alt="" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
+            : <div style={{ width: '100%', aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#aaa', fontSize: 13 }}>No image generated yet</div>
+          }
+          {hasMultiple && (
+            <>
+              {activeIdx > 0 && (
+                <button onClick={() => setActiveIdx(i => i - 1)} style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', width: 28, height: 28, cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}>‹</button>
+              )}
+              {activeIdx < displayImages.length - 1 && (
+                <button onClick={() => setActiveIdx(i => i + 1)} style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', width: 28, height: 28, cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }}>›</button>
+              )}
+              <div style={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 4 }}>
+                {displayImages.map((_, i) => (
+                  <div key={i} onClick={() => setActiveIdx(i)} style={{ width: i === activeIdx ? 8 : 6, height: i === activeIdx ? 8 : 6, borderRadius: '50%', background: i === activeIdx ? '#3897f0' : 'rgba(255,255,255,0.7)', cursor: 'pointer', transition: 'all 0.15s' }} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        {/* Actions */}
+        <div style={{ padding: '10px 16px 6px', display: 'flex', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 14, flex: 1 }}>
+            <span style={{ fontSize: 24, cursor: 'pointer' }}>🤍</span>
+            <span style={{ fontSize: 24, cursor: 'pointer' }}>💬</span>
+            <span style={{ fontSize: 24, cursor: 'pointer' }}>📤</span>
+          </div>
+          <span style={{ fontSize: 24, cursor: 'pointer' }}>🔖</span>
+        </div>
+        {/* Caption */}
+        {caption && (
+          <div style={{ padding: '0 16px 14px', fontSize: 14, lineHeight: 1.55, color: '#262626' }}>
+            <span style={{ fontWeight: 600 }}>nrichsouls</span>{' '}
+            <span style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{captionPreview}{caption.length > 120 ? '… ' : ''}</span>
+            {caption.length > 120 && <span style={{ color: '#8e8e8e', cursor: 'pointer' }}>more</span>}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function IdeaDetailPage({ params }) {
@@ -184,6 +385,12 @@ export default function IdeaDetailPage({ params }) {
   const [editedContent, setEditedContent] = useState({});
   const [savingTab, setSavingTab] = useState({});
   const [savedTab, setSavedTab] = useState({});
+  const [showPreview, setShowPreview] = useState(false);
+
+  function switchTab(key) {
+    setActiveTab(key);
+    setShowPreview(false);
+  }
 
   // Cover image
   const [showCoverImgGen, setShowCoverImgGen] = useState(false);
@@ -614,7 +821,7 @@ export default function IdeaDetailPage({ params }) {
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-4">
         <div className="flex border-b border-slate-100 overflow-x-auto">
           {PLATFORMS.map((p) => (
-            <button key={p.key} onClick={() => setActiveTab(p.key)}
+            <button key={p.key} onClick={() => switchTab(p.key)}
               className={`flex items-center gap-2 px-5 py-3.5 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === p.key ? 'border-indigo-500 text-indigo-700 bg-indigo-50/50' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
               }`}>
@@ -626,32 +833,26 @@ export default function IdeaDetailPage({ params }) {
         </div>
 
         <div className="p-5">
-          {/* Lead image strip for LinkedIn & Twitter */}
-          {(activeTab === 'generated_linkedin' || activeTab === 'generated_twitter') && idea.content_image && (
-            <div className="mb-4 flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
-              <img src={idea.content_image} alt="" className="w-16 h-16 object-cover rounded-lg shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-blue-800">Lead Image</p>
-                <p className="text-xs text-blue-600 truncate">{idea.content_image}</p>
-              </div>
-              <CopyButton text={idea.content_image} label="Copy URL" />
-            </div>
-          )}
-
+          {/* Toolbar */}
           <div className="flex items-center justify-between mb-4">
-            <p className="text-xs text-slate-400">
-              {activeTab === 'generated_blog'      && 'HTML article — will render on the blog as-is'}
-              {activeTab === 'generated_linkedin'  && 'Plain text — paste directly into LinkedIn'}
-              {activeTab === 'generated_twitter'   && 'Thread separated by --- · each section = one tweet'}
-              {activeTab === 'generated_instagram' && 'Caption + hashtags for Instagram'}
-            </p>
+            {showPreview
+              ? <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">
+                  {activeTab === 'generated_blog' ? '📝 Blog preview' : activeTab === 'generated_linkedin' ? '💼 LinkedIn preview' : activeTab === 'generated_twitter' ? '𝕏 X preview' : '📸 Instagram preview'}
+                </span>
+              : <p className="text-xs text-slate-400">
+                  {activeTab === 'generated_blog'      && 'HTML article — will render on the blog as-is'}
+                  {activeTab === 'generated_linkedin'  && 'Plain text — paste directly into LinkedIn'}
+                  {activeTab === 'generated_twitter'   && 'Thread separated by --- · each section = one tweet'}
+                  {activeTab === 'generated_instagram' && 'Caption + hashtags for Instagram'}
+                </p>
+            }
             <div className="flex items-center gap-2">
-              {activeTab === 'generated_linkedin' && !editMode[activeTab] && activeContent && (
+              {!editMode[activeTab] && !showPreview && activeTab === 'generated_linkedin' && activeContent && (
                 liConnected
                   ? <LinkedInPostButton text={activeContent} imageUrl={idea.content_image || ''} />
                   : <Link href="/admin/settings" className="text-xs text-slate-400 hover:text-indigo-600">Connect LinkedIn →</Link>
               )}
-              {!editMode[activeTab] && (activeTab === 'generated_blog' || activeTab === 'generated_linkedin') && (
+              {!editMode[activeTab] && !showPreview && (activeTab === 'generated_blog' || activeTab === 'generated_linkedin') && (
                 <CopyButton text={activeContent} />
               )}
               {editMode[activeTab] ? (
@@ -665,15 +866,29 @@ export default function IdeaDetailPage({ params }) {
                     {savingTab[activeTab] ? 'Saving…' : 'Save'}
                   </button>
                 </div>
-              ) : (
-                <button onClick={() => startEdit(activeTab)}
+              ) : showPreview ? (
+                <button onClick={() => setShowPreview(false)}
                   className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">
-                  ✏️ Edit
+                  ← Source
                 </button>
+              ) : (
+                <div className="flex gap-2">
+                  {activeContent && (
+                    <button onClick={() => setShowPreview(true)}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-600">
+                      👁 Preview
+                    </button>
+                  )}
+                  <button onClick={() => startEdit(activeTab)}
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">
+                    ✏️ Edit
+                  </button>
+                </div>
               )}
             </div>
           </div>
 
+          {/* Content area */}
           {editMode[activeTab] ? (
             <textarea
               value={editedContent[activeTab] ?? ''}
@@ -681,15 +896,33 @@ export default function IdeaDetailPage({ params }) {
               rows={activeTab === 'generated_blog' ? 30 : 16}
               className="w-full border border-indigo-300 rounded-xl px-4 py-3 text-xs font-mono text-slate-700 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-y"
             />
+          ) : showPreview ? (
+            <div className="bg-slate-50 rounded-xl overflow-y-auto max-h-[700px] p-5">
+              {activeTab === 'generated_blog'      && <BlogPreview      idea={idea} />}
+              {activeTab === 'generated_linkedin'  && <LinkedInPreview  idea={idea} />}
+              {activeTab === 'generated_twitter'   && <XPreview         idea={idea} />}
+              {activeTab === 'generated_instagram' && <InstagramPreview idea={idea} carouselItems={carouselItems} />}
+            </div>
           ) : (
             <>
+              {/* Lead image strip for LinkedIn & Twitter (source view only) */}
+              {(activeTab === 'generated_linkedin' || activeTab === 'generated_twitter') && idea.content_image && (
+                <div className="mb-4 flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
+                  <img src={idea.content_image} alt="" className="w-16 h-16 object-cover rounded-lg shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-blue-800">Lead Image</p>
+                    <p className="text-xs text-blue-600 truncate">{idea.content_image}</p>
+                  </div>
+                  <CopyButton text={idea.content_image} label="Copy URL" />
+                </div>
+              )}
               {activeTab === 'generated_blog' && (
                 activeContent
                   ? <div className="article-content prose prose-slate max-w-none text-sm leading-relaxed bg-slate-50 rounded-xl p-5 max-h-[600px] overflow-y-auto"
                       dangerouslySetInnerHTML={{ __html: activeContent }} />
                   : <p className="text-center py-12 text-slate-400 text-sm">No blog content. Go back to generate.</p>
               )}
-              {activeTab === 'generated_twitter'   && <TwitterView   content={activeContent} />}
+              {activeTab === 'generated_twitter'   && <TwitterView     content={activeContent} />}
               {activeTab === 'generated_instagram' && <InstagramCaption content={activeContent} />}
               {activeTab === 'generated_linkedin' && (
                 activeContent

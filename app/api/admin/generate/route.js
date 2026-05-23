@@ -36,14 +36,16 @@ BLOG rules:
 - 900–1100 words total
 
 LINKEDIN rules:
+- PLAIN TEXT ONLY — absolutely no HTML tags (<strong>, <em>, <ul>, <li>, etc.)
 - First line = strong hook (no "I'm excited to share…" or "Thrilled to announce…")
 - Personal insight or contrarian angle on the idea
-- 3–4 bullet takeaways using • character
+- 3–4 bullet takeaways using the • character (not HTML lists)
 - End with a thought-provoking question for comments
 - 200–280 words
 - 4–5 relevant hashtags on the last line
 
 TWITTER/X rules:
+- PLAIN TEXT ONLY — absolutely no HTML tags
 - Thread of exactly 7 tweets
 - Tweet 1: punchy hook that makes people stop scrolling, NO numbers
 - Tweets 2–6: one insight per tweet, labeled (2/7) … (6/7)
@@ -52,6 +54,7 @@ TWITTER/X rules:
 - Separate tweets with exactly the string: ---
 
 INSTAGRAM rules:
+- PLAIN TEXT ONLY — absolutely no HTML tags
 - First line: punchy opener with an emoji
 - Body: value-driven content, emojis throughout, line breaks for readability
 - Call to action (save this / drop a comment / follow for more)

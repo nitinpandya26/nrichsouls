@@ -3,38 +3,52 @@ import { NextResponse } from 'next/server';
 import { authOptions } from '../../../../../lib/auth';
 import { supabaseAdmin } from '../../../../../lib/supabase';
 
+const LI_VERSION = '202604';
+const LI_HEADERS = (token) => ({
+  Authorization: `Bearer ${token}`,
+  'Content-Type': 'application/json',
+  'LinkedIn-Version': LI_VERSION,
+  'X-Restli-Protocol-Version': '2.0.0',
+});
+
 async function uploadImageToLinkedIn(token, personUrn, imageUrl) {
+  // 1. Fetch image binary
   const imgRes = await fetch(imageUrl);
   if (!imgRes.ok) throw new Error(`Failed to fetch image: ${imgRes.status}`);
-  const arrayBuffer = await imgRes.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  const buffer = Buffer.from(await imgRes.arrayBuffer());
 
+  // 2. Initialize upload
   const initRes = await fetch('https://api.linkedin.com/rest/images?action=initializeUpload', {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'LinkedIn-Version': '202604',
-      'X-Restli-Protocol-Version': '2.0.0',
-    },
+    headers: LI_HEADERS(token),
     body: JSON.stringify({ initializeUploadRequest: { owner: personUrn } }),
   });
-
   if (!initRes.ok) {
     const err = await initRes.json().catch(() => ({}));
-    throw new Error(err.message ?? `LinkedIn initializeUpload error ${initRes.status}`);
+    throw new Error(err.message ?? err.error ?? `initializeUpload ${initRes.status}`);
   }
+  const { value: { uploadUrl, image: imageUrn } } = await initRes.json();
 
-  const initData = await initRes.json();
-  const { uploadUrl, image: imageUrn } = initData.value;
-
+  // 3. Upload binary
   const putRes = await fetch(uploadUrl, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/octet-stream' },
     body: buffer,
   });
+  if (!putRes.ok) throw new Error(`Image PUT failed: ${putRes.status}`);
 
-  if (!putRes.ok) throw new Error(`LinkedIn image upload PUT error ${putRes.status}`);
+  // 4. Poll until LinkedIn marks image AVAILABLE (up to 10s)
+  const encodedUrn = encodeURIComponent(imageUrn);
+  for (let i = 0; i < 10; i++) {
+    await new Promise((r) => setTimeout(r, 1000));
+    const statusRes = await fetch(`https://api.linkedin.com/rest/images/${encodedUrn}`, {
+      headers: LI_HEADERS(token),
+    });
+    if (statusRes.ok) {
+      const { status } = await statusRes.json();
+      if (status === 'AVAILABLE') break;
+    }
+  }
 
   return imageUrn;
 }
@@ -66,6 +80,7 @@ export async function POST(request) {
     );
   }
 
+  // Upload image if provided
   let imageUrn = null;
   if (imageUrl?.trim()) {
     try {
@@ -75,6 +90,7 @@ export async function POST(request) {
     }
   }
 
+  // Build post body
   const postBody = {
     author: s.linkedin_person_urn,
     commentary: text.trim(),
@@ -87,26 +103,20 @@ export async function POST(request) {
     lifecycleState: 'PUBLISHED',
     isReshareDisabledByAuthor: false,
   };
-
   if (imageUrn) {
     postBody.content = { media: { id: imageUrn } };
   }
 
   const liRes = await fetch('https://api.linkedin.com/rest/posts', {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${s.linkedin_access_token}`,
-      'Content-Type': 'application/json',
-      'LinkedIn-Version': '202604',
-      'X-Restli-Protocol-Version': '2.0.0',
-    },
+    headers: LI_HEADERS(s.linkedin_access_token),
     body: JSON.stringify(postBody),
   });
 
   if (!liRes.ok) {
     const err = await liRes.json().catch(() => ({}));
-    const msg = err.message ?? err.error ?? `LinkedIn API error ${liRes.status}`;
-    return NextResponse.json({ error: msg }, { status: 502 });
+    const msg = err.message ?? err.error ?? JSON.stringify(err);
+    return NextResponse.json({ error: `LinkedIn post failed (${liRes.status}): ${msg}` }, { status: 502 });
   }
 
   const postId = liRes.headers.get('x-linkedin-id');

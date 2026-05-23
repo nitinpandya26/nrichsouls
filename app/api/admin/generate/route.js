@@ -50,7 +50,7 @@ TWITTER/X rules:
 - Tweet 1: punchy hook that makes people stop scrolling, NO numbers
 - Tweets 2–6: one insight per tweet, labeled (2/7) … (6/7)
 - Tweet 7: CTA + summary labeled (7/7)
-- Every tweet ≤ 280 characters
+- Every tweet MUST be 180–220 characters — write full, substantive sentences, never stop at one short line
 - Separate tweets with exactly the string: ---
 
 INSTAGRAM rules:

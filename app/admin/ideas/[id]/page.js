@@ -407,6 +407,7 @@ export default function IdeaDetailPage({ params }) {
   const [carouselSaved, setCarouselSaved] = useState(false);
   const [carouselPromptError, setCarouselPromptError] = useState('');
   const [carouselPromptModel, setCarouselPromptModel] = useState('anthropic:claude-sonnet-4-6');
+  const [carouselCount, setCarouselCount] = useState(6);
   const stopCarouselRef = useRef(false);
   const [carouselImgModel, setCarouselImgModel] = useState('dall-e-3');
   const [carouselImgSize, setCarouselImgSize] = useState('1024x1024');
@@ -499,7 +500,7 @@ export default function IdeaDetailPage({ params }) {
       const res = await fetch('/api/admin/generate-carousel-prompts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blogHtml: idea.generated_blog, title: idea.title, count: 6, provider: carouselPromptModel }),
+        body: JSON.stringify({ blogHtml: idea.generated_blog, title: idea.title, count: carouselCount, provider: carouselPromptModel }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Failed to generate prompts');
@@ -977,7 +978,19 @@ export default function IdeaDetailPage({ params }) {
           </div>
 
           {/* Model pickers */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <div>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">No. of Images</label>
+              <select
+                value={carouselCount}
+                onChange={(e) => setCarouselCount(Number(e.target.value))}
+                className="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 bg-white"
+              >
+                {[1,2,3,4,5,6,7,8,9,10].map((n) => (
+                  <option key={n} value={n}>{n} image{n > 1 ? 's' : ''}</option>
+                ))}
+              </select>
+            </div>
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Prompt Model</label>
               <select

@@ -3,6 +3,136 @@ import { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
+function InstagramCard() {
+  const [ig, setIg]           = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving]   = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
+  const [error, setError]     = useState('');
+  const [success, setSuccess] = useState('');
+  const [token, setToken]     = useState('');
+  const [userId, setUserId]   = useState('');
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/admin/instagram/status')
+      .then((r) => r.json())
+      .then(setIg)
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function connect() {
+    if (!token.trim() || !userId.trim()) { setError('Both fields are required'); return; }
+    setSaving(true); setError(''); setSuccess('');
+    try {
+      const res = await fetch('/api/admin/instagram/connect', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accessToken: token.trim(), userId: userId.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Connection failed');
+      setIg({ connected: true, username: data.username });
+      setToken(''); setUserId(''); setShowForm(false);
+      setSuccess(`Connected as @${data.username}`);
+    } catch (e) { setError(e.message); }
+    finally { setSaving(false); }
+  }
+
+  async function disconnect() {
+    if (!confirm('Disconnect Instagram?')) return;
+    setDisconnecting(true);
+    await fetch('/api/admin/instagram/disconnect', { method: 'POST' });
+    setIg({ connected: false, username: null });
+    setDisconnecting(false);
+  }
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-slate-800">Instagram</h2>
+            <p className="text-sm text-slate-500">Publish posts and carousels to your Instagram account</p>
+          </div>
+        </div>
+        <div className="shrink-0">
+          {loading ? (
+            <div className="w-4 h-4 border-2 border-slate-300 border-t-transparent rounded-full animate-spin" />
+          ) : ig?.connected ? (
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">Connected ✓</span>
+          ) : (
+            <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">Not connected</span>
+          )}
+        </div>
+      </div>
+
+      {ig?.connected && ig.username && (
+        <p className="mt-4 pl-16 text-sm text-slate-600">Posting as <strong>@{ig.username}</strong></p>
+      )}
+
+      {success && <p className="mt-3 pl-16 text-sm text-emerald-600">{success}</p>}
+      {error   && <p className="mt-3 pl-16 text-sm text-red-500">{error}</p>}
+
+      <div className="mt-5 pl-16 flex flex-wrap items-center gap-3">
+        {ig?.connected ? (
+          <button onClick={disconnect} disabled={disconnecting}
+            className="text-sm font-semibold px-4 py-2 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50">
+            {disconnecting ? 'Disconnecting…' : 'Disconnect'}
+          </button>
+        ) : (
+          <button onClick={() => setShowForm((v) => !v)}
+            className="text-sm font-semibold px-4 py-2 rounded-xl text-white transition-colors"
+            style={{ background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' }}>
+            {showForm ? 'Cancel' : '🔗 Connect Instagram'}
+          </button>
+        )}
+      </div>
+
+      {showForm && !ig?.connected && (
+        <div className="mt-5 pl-16 space-y-3">
+          <div className="bg-amber-50 border border-amber-200 text-amber-700 text-xs rounded-xl px-4 py-3 leading-relaxed">
+            <strong>Meta App Review required.</strong> The <code>instagram_content_publish</code> permission needs approval before posting from non-developer accounts. Until then, only accounts added as testers/developers in your Meta app can post.
+          </div>
+          <div className="space-y-2 max-w-sm">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1">Instagram User ID</label>
+              <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)}
+                placeholder="e.g. 17841400000000000"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 font-mono" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1">Access Token</label>
+              <textarea value={token} onChange={(e) => setToken(e.target.value)}
+                placeholder="Paste your Instagram access token here…"
+                rows={3}
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 font-mono resize-none" />
+            </div>
+            <button onClick={connect} disabled={saving || !token.trim() || !userId.trim()}
+              className="text-sm font-semibold px-4 py-2 rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 transition-colors">
+              {saving ? 'Verifying & Saving…' : 'Save & Verify'}
+            </button>
+          </div>
+          <details className="text-xs text-slate-500 max-w-sm">
+            <summary className="cursor-pointer hover:text-slate-700">How to get your User ID and token</summary>
+            <ol className="mt-2 space-y-1 list-decimal list-inside leading-relaxed">
+              <li>Go to <a href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Graph API Explorer</a></li>
+              <li>Select your <strong>nrichsouls_ai</strong> app</li>
+              <li>Add permission <code>instagram_content_publish</code> and generate token</li>
+              <li>Call <code>GET /me?fields=id,username</code> — copy the <code>id</code></li>
+              <li>Paste the token and ID above</li>
+            </ol>
+          </details>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const ERROR_MESSAGES = {
   linkedin_not_configured: 'LINKEDIN_CLIENT_ID or LINKEDIN_REDIRECT_URI is missing from .env.local',
   invalid_state:           'OAuth state mismatch — possible CSRF. Please try again.',
@@ -200,6 +330,9 @@ LINKEDIN_REDIRECT_URI=${typeof window !== 'undefined' ? window.location.origin :
           </details>
         )}
       </div>
+
+      {/* Instagram card */}
+      <InstagramCard />
 
       {/* Hashtag groups */}
       <div id="hashtags" ref={hashtagRef} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">

@@ -59,6 +59,68 @@ function LinkedInPostButton({ text, imageUrl }) {
   );
 }
 
+function InstagramPostButton({ caption, imageUrl }) {
+  const [status, setStatus] = useState('idle');
+  const [error, setError]   = useState('');
+  async function post() {
+    setStatus('posting'); setError('');
+    try {
+      const res = await fetch('/api/admin/instagram/post', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ caption, imageUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Post failed');
+      setStatus('success');
+    } catch (e) { setError(e.message); setStatus('error'); }
+  }
+  if (status === 'success') return <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg">✓ Posted to Instagram</span>;
+  return (
+    <div className="flex items-center gap-2">
+      {status === 'error' && <span className="text-xs text-red-500 max-w-xs truncate" title={error}>{error}</span>}
+      <button onClick={post} disabled={status === 'posting' || !caption?.trim() || !imageUrl?.trim()}
+        className="text-xs font-semibold px-3 py-1.5 rounded-lg text-white transition-colors disabled:opacity-50 flex items-center gap-1.5"
+        style={{ background: 'linear-gradient(90deg, #f09433, #dc2743, #bc1888)' }}>
+        {status === 'posting'
+          ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Posting…</>
+          : '📸 Post to Instagram'}
+      </button>
+    </div>
+  );
+}
+
+function InstagramCarouselButton({ caption, imageUrls }) {
+  const [status, setStatus] = useState('idle');
+  const [error, setError]   = useState('');
+  const validUrls = (imageUrls ?? []).filter(Boolean);
+  async function post() {
+    setStatus('posting'); setError('');
+    try {
+      const res = await fetch('/api/admin/instagram/carousel', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ caption, imageUrls: validUrls }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Post failed');
+      setStatus('success');
+    } catch (e) { setError(e.message); setStatus('error'); }
+  }
+  if (status === 'success') return <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg">✓ Carousel Posted</span>;
+  return (
+    <div className="flex items-center gap-2">
+      {status === 'error' && <span className="text-xs text-red-500 max-w-xs truncate" title={error}>{error}</span>}
+      <button onClick={post} disabled={status === 'posting' || validUrls.length < 2}
+        className="text-xs font-semibold px-3 py-1.5 rounded-lg text-white transition-colors disabled:opacity-50 flex items-center gap-1.5"
+        style={{ background: 'linear-gradient(90deg, #f09433, #dc2743, #bc1888)' }}
+        title={validUrls.length < 2 ? 'Need at least 2 generated images' : `Post ${validUrls.length} images as carousel`}>
+        {status === 'posting'
+          ? <><div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />Posting…</>
+          : `📸 Post Carousel (${validUrls.length})`}
+      </button>
+    </div>
+  );
+}
+
 function CharBar({ len, max }) {
   const pct = Math.min((len / max) * 100, 100);
   const over = len > max;
@@ -394,6 +456,7 @@ export default function IdeaDetailPage({ params }) {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('generated_blog');
   const [liConnected, setLiConnected] = useState(null);
+  const [igConnected, setIgConnected] = useState(false);
 
   const [editMode, setEditMode] = useState({});
   const [editedContent, setEditedContent] = useState({});
@@ -446,6 +509,10 @@ export default function IdeaDetailPage({ params }) {
       .then((r) => r.json())
       .then((d) => setLiConnected(d.connected ?? false))
       .catch(() => setLiConnected(false));
+    fetch('/api/admin/instagram/status')
+      .then((r) => r.json())
+      .then((d) => setIgConnected(d.connected ?? false))
+      .catch(() => setIgConnected(false));
   }, [id]);
 
   function getContent(key) {
@@ -875,6 +942,11 @@ export default function IdeaDetailPage({ params }) {
                   ? <LinkedInPostButton text={activeDisplayContent} imageUrl={idea.content_image || ''} />
                   : <Link href="/admin/settings" className="text-xs text-slate-400 hover:text-indigo-600">Connect LinkedIn →</Link>
               )}
+              {!editMode[activeTab] && !showPreview && activeTab === 'generated_instagram' && activeDisplayContent && (
+                igConnected
+                  ? <InstagramPostButton caption={activeDisplayContent} imageUrl={idea.content_image || (idea.carousel_images?.[0] ?? '')} />
+                  : <Link href="/admin/settings" className="text-xs text-slate-400 hover:text-indigo-600">Connect Instagram →</Link>
+              )}
               {!editMode[activeTab] && !showPreview && (activeTab === 'generated_blog' || activeTab === 'generated_linkedin') && (
                 <CopyButton text={activeDisplayContent} />
               )}
@@ -968,6 +1040,12 @@ export default function IdeaDetailPage({ params }) {
             <div className="flex items-center gap-2">
               {carouselItems.length > 0 && generatedCarouselCount > 0 && (
                 <>
+                  {igConnected && (
+                    <InstagramCarouselButton
+                      caption={getDisplayContent('generated_instagram')}
+                      imageUrls={carouselItems.map((item) => item.url).filter(Boolean)}
+                    />
+                  )}
                   <button onClick={downloadCarouselZip}
                     className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600">
                     ↓ ZIP ({generatedCarouselCount})

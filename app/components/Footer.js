@@ -104,8 +104,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-slate-700 text-center text-xs text-slate-500">
-          © {new Date().getFullYear()} NrichSouls. All rights reserved.
+        <div className="mt-12 pt-6 border-t border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <span>© {new Date().getFullYear()} NrichSouls. All rights reserved.</span>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>
